@@ -1,0 +1,21 @@
+:root{
+    --dark : #2d2c2c;
+  }
+
+  #root{
+    width:100%;
+  }
+  
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
+
+  button{
+    cursor:pointer;
+  }
+
+  a{
+    text-decoration:none;
+  }
