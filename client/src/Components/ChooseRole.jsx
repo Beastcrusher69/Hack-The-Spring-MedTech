@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from 'axios';
 import {be_url} from "/config"
 import {useNavigate} from "react-router-dom";
-import "../CSS/chooseRole.css";
+import "../CSS/ChooseRole.css";
 
 function ChooseRole(){
 
