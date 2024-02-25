@@ -1,0 +1,45 @@
+#choose-role{
+    height : 100vh;
+    width : 100% ;
+    display: grid;
+    place-items: center;
+}
+
+#choose-role-wrap{
+    width : 80% ;
+}
+
+#choose-role-option-wrap{
+    width : 50% ;
+}
+
+#choose-role h1{
+    font-size: 4rem;
+    font-weight: 400;
+}
+
+#choose-role h2{
+    font-size: 1.5rem;
+}
+
+.choose-role-option-div{
+    background-color: whitesmoke;
+    border-radius: 15px;
+    padding : 20px ;
+    cursor: pointer ;
+}
+
+.choose-role-option-span{
+     display: block;
+     font-size: 2rem;
+     font-weight: 600;
+     margin-bottom: 10px ; 
+}
+
+.choose-role-option-p{
+    font-size: 1.5rem;
+}
+
+#choose-role h1 , #choose-role h2 , .choose-role-option-div{
+    margin-bottom: 20px;
+}

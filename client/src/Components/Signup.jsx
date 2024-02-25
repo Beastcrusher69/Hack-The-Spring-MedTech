@@ -21,6 +21,7 @@ function Signup() {
     let [emailTaken , setEmailTaken] = useState(false);
     let [confirmPassword , setConfirmPassword] = useState("");
     let [validPhoneNumber, setValidPhoneNumber] = useState(true);
+    let phoneNumberRegex = /[0-9]{10}/ ;
 
     let navigate = useNavigate();
 
@@ -77,6 +78,9 @@ function Signup() {
                         handleEmailValidity(2) ;
                     }
                     else if( res.data.code == 2){
+
+                        console.log(JSON.stringify(res.data.user)) ;
+                        window.localStorage.setItem("user" , JSON.stringify(res.data.user)) ;
                         navigate('/choose-role');
                     }
                   })
@@ -140,10 +144,10 @@ function Signup() {
                        type="tel"
                        pattern='[0-9]{10}'
                        required
-                       onChange={(e)=> { console.log(e.target.value.length) ; (e.target.value.length == 10) ? setValidPhoneNumber(true) : setValidPhoneNumber(false) ; setPhoneNumber(e.target.value); }}></input>
+                       onChange={(e)=> { ((e.target.value.length == 10) && ((phoneNumberRegex).test(e.target.value))) ? setValidPhoneNumber(true) : setValidPhoneNumber(false) ; setPhoneNumber(e.target.value); }}></input>
                 <p className='error-box' style={{ display : validPhoneNumber ? "none" : "block"}}>
                     <span className='error-icon-span'><AiOutlineExclamationCircle/></span>
-                    please enter 10 digit phone number 
+                    please enter valid phone number 
                 </p>
 
                 <label htmlFor='pwd' type="password">password</label>

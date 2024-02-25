@@ -9,7 +9,8 @@ const mongoUri = process.env.MONGO_URI ;
 const port = 4000 ;
 
 const corsOptions = {
-    origin : "http://localhost:5173",
+    // origin : "http://localhost:5173",
+    origin : "https://hack-the-spring-med-tech.vercel.app",
     credentials : true,
     optionSuccessStatus : 200 
 }
@@ -100,10 +101,35 @@ app.post("/signup" , async (req , res)=>{
     res.json({code : 2 , "user" : { firstName , lastName}});    
 })
 
-app.listen(port  , ()=>{
-    console.log("listening on port :", port);
-})
+// app.post("/login") ;
 
 app.get("/choose-role" , AuthenticateToken ,(req , res)=>{
     res.json({code : 2 , message : "valid user"});
+})
+
+app.get("/submit-medical-history" , AuthenticateToken ,(req , res)=>{
+    res.json({code : 2 , message : "valid user"});
+})
+
+// app.post("/submit-medical-history" , AuthenticateToken ,(req , res)=>{
+//     res.json({code : 2 , message : "valid user"});
+// })
+
+// app.get("/select-patient" , AuthenticateToken, async (req , res)=>{
+
+//     let emailId = req.payload.emailId ;
+
+//     // console.log(payload) ;
+
+//     let user = await Users.findOne({emailId})
+
+//     user.role = "patient" ;
+
+//     await user.save() ;
+
+//     res.json({ code : 2 , message : "role set to patient"}) ;
+// })
+
+app.listen(port  , ()=>{
+    console.log("listening on port :", port);
 })
