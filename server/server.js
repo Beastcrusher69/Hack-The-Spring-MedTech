@@ -89,7 +89,7 @@ app.get("/home" , (req , res)=>{
 
 app.post("/signup" , async (req , res)=>{
 
-    let {firstName , lastName , emailId , phoneNo , password , role } = req.body ;
+    let {firstName , lastName , emailId , phoneNumber, password , role } = req.body ;
 
     let user = await Users.findOne({emailId});
     let payload = { emailId };
