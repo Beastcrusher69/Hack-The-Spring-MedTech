@@ -63,7 +63,21 @@ const UserSchema = mongoose.Schema({
     role : String 
 })
 
-const Users = mongoose.model("User" , UserSchema) ;
+const PatientSchema = mongoose.Schema({
+     emailId : String , 
+     address : String,
+     city : String ,
+     state : String ,
+     birthdate : String ,
+     age : Number ,
+     gender : String,
+     occupation : String,
+     previousMedicalHistory : String,
+     previousMedicalHistoryImageURLs : [String]
+    })
+
+const Users = mongoose.model("Users" , UserSchema) ;
+const Patients = mongoose.model("Patients" , PatientSchema) ;
 
 app.get("/home" , (req , res)=>{
     res.json({
@@ -90,7 +104,7 @@ app.post("/signup" , async (req , res)=>{
     firstName = firstName.slice(0,1).toUpperCase() + firstName.slice(1);
     lastName = lastName.slice(0,1).toUpperCase() + lastName.slice(1);
 
-    let userData = {firstName , lastName , emailId , phoneNo , password , role } ;
+    let userData = {firstName , lastName , emailId , phoneNumber , password , role } ;
 
     Users.create(userData) ; 
 
@@ -103,17 +117,38 @@ app.post("/signup" , async (req , res)=>{
 
 // app.post("/login") ;
 
-app.get("/choose-role" , AuthenticateToken ,(req , res)=>{
+app.get("/choose-role" ,
+ AuthenticateToken ,
+(req , res)=>{
     res.json({code : 2 , message : "valid user"});
 })
 
-app.get("/submit-medical-history" , AuthenticateToken ,(req , res)=>{
+app.get("/submit-medical-history" ,
+ AuthenticateToken ,
+(req , res)=>{
     res.json({code : 2 , message : "valid user"});
 })
 
-// app.post("/submit-medical-history" , AuthenticateToken ,(req , res)=>{
-//     res.json({code : 2 , message : "valid user"});
-// })
+app.post("/submit-medical-history" , AuthenticateToken ,async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId});
+    
+    user.role = "patient" ;
+
+    user.save() ;
+
+    let data = req.body ;
+    console.log("data >>> " ,data) ;
+
+    let PatientData = {emailId ,...data } ;
+
+    console.log("patient data >>> " ,PatientData) ;
+    Patients.create(PatientData) ;
+
+    res.json({code : 2 , message : "data saved successfully"});
+})
 
 // app.get("/select-patient" , AuthenticateToken, async (req , res)=>{
 

@@ -88,32 +88,41 @@ function SubmitMedicalHistory(){
 
             let URLarray = [] ;
 
-        if(profilePic){
-            await uploadimage()
+            for(let i = 0 ; i < files.length ; i++){
+                await uploadimage(i)
+                .then((res)=>{
+                    console.log(res.data.url) ;
+                    URLarray.push(res.data.url) ;
+                })
+                .catch((err)=>{
+                    console.error(err) ;
+                })
+            }
+
+            axios.post(be_url + "/submit-medical-history" , { address , city , state , birthdate , age , gender , occupation , previousMedicalHistory , previousMedicalHistoryImageURLs : URLarray } , {withCredentials : true})
             .then((res)=>{
-                console.log(res.data.url) ;
-                ppURL = res.data.url ;
+
+                console.log(res.data) ;
+
             })
             .catch((err)=>{
-                console.error(err) ;
+                console.log(err) ;
             })
 
-        }
+
         }
         else{
             setIsFilled(false) ;
         }
 
-
-
-        console.log("address : " , address);
-        console.log("city : " , city);
-        console.log("state : " , state);
-        console.log("birthdate : " , birthdate);
-        console.log("age : " , age);
-        console.log("gender : " , gender);
-        console.log("occupation : " , occupation);
-        console.log("files : " , files);
+        console.log("address : " , address , typeof(address));
+        console.log("city : " , city , typeof(city));
+        console.log("state : " , state , typeof(state));
+        console.log("birthdate : " , birthdate , typeof(birthdate));
+        console.log("age : " , age , typeof(age));
+        console.log("gender : " , gender , typeof(gender));
+        console.log("occupation : " , occupation , typeof(occupation));
+        console.log("urlarr[0] : " , URLarray[0] , typeof(URLarray[0]));
 
     }
 

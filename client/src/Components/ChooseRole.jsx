@@ -44,7 +44,7 @@ function ChooseRole(){
                         <p className="choose-role-option-p">I am here to seek medical diagnosis</p>
                     </div>
 
-                    <div className="choose-role-option-div" onClick={()=>{}}>
+                    <div className="choose-role-option-div" onClick={()=>{navigate("/submit-doctor-details")}}>
                         <span className="choose-role-option-span" >Doctor</span>
                         <p className="choose-role-option-p">I am a medical practitioner</p>
                     </div>

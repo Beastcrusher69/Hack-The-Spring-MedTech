@@ -1,0 +1,212 @@
+#doctor-dashboard-header {
+    background-color: #fbf8f8;
+    color: rgb(20, 20, 20);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    margin-bottom: 2px;
+}
+
+.doctor-dashboard-welcome {
+    font-size: 1.5rem;
+}
+
+#doctor-dashboard-nav > ul {
+    list-style:none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    font-size: large;
+}
+
+#doctor-dashboard-nav > ul li {
+    margin-right: 22px;
+}
+
+#doctor-dashboard-nav > ul li a {
+    color: rgb(35, 35, 35);
+    text-decoration: none;
+    transition: color 0.5s;
+}
+
+#doctor-dashboard-nav > ul li a:hover {
+    color: blue;
+}
+
+.doctor-dashboard-burger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.doctor-dashboard-burger div {
+    width: 25px;
+    height: 3px;
+    background-color: rgb(35, 35, 35);
+    margin: 3px;
+    transition: all 0.3s ease;
+}
+
+
+@media (max-width: 768px) {
+    #doctor-dashboard-nav > ul {
+        display: none;
+    }
+
+    .doctor-dashboard-burger {
+        display: flex;
+    }
+
+}
+
+.doctor-dashboard-main {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    height: 100vh;
+    display:flex;
+    justify-content: space-around;
+    background-image: url('/public/doctor-bg.jpg'); 
+    background-size:cover;
+    background-position:center; 
+}
+
+.doctor-dashboard-container {
+    display: flex;
+    justify-content:space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: stretch;
+}
+
+.doctor-dashboard-section {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 10px;
+    width: max-content;
+    height: auto;
+    max-height: 140px ;
+    text-wrap: balance;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+    /* flex: 1; */
+}
+
+.doctor-dashboard-section h2 {
+    color: #1e1e1e;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.doctor-dashboard-section a {
+    display: block;
+    text-decoration: none;
+    color: rgb(0, 0, 255);
+    font-size: 1rem;
+    margin-top: 5px;
+}
+.doctor-dashboard-section a:hover {
+    text-decoration: underline;
+    color: rgb(0, 0, 183);
+}
+
+#doctor-dashboard-footer {
+    background-color: #2b2b2b;
+    color: white;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 7px;
+    margin-top: 2px;
+}
+
+.doctor-dashboard-footer-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.doctor-dashboard-contact-info,
+.doctor-dashboard-quick-links,
+.doctor-dashboard-legal-info {
+    flex: 1;
+}
+
+.doctor-dashboard-contact-info h3,
+.doctor-dashboard-quick-links h3,
+.doctor-dashboard-legal-info p {
+    margin-bottom: 10px;
+}
+
+.doctor-dashboard-contact-info p,
+.doctor-dashboard-quick-links ul,
+.doctor-dashboard-legal-info p {
+    margin: 0;
+}
+.doctor-dashboard-legal-info a {
+    text-decoration:none;
+    color: white;
+}
+.doctor-dashboard-quick-links ul {
+    padding: 0;
+    list-style: none;
+}
+
+.doctor-dashboard-quick-links ul li {
+    margin-bottom: 5px;
+}
+
+.doctor-dashboard-quick-links ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.5s;
+}
+
+.doctor-dashboard-quick-links ul li a:hover, .doctor-dashboard-legal-info a:hover {
+    color:red;
+}
+
+.doctor-dashboard-nav-links .doctor-dashboard-sub-menu {
+    display: none;
+    position: absolute;
+    background-color: #ececec;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 1;
+}
+
+.doctor-dashboard-nav-links .doctor-dashboard-sub-menu li {
+    margin: 5px 0;
+}
+
+.doctor-dashboard-nav-links .doctor-dashboard-sub-menu li a:hover {
+    color: blue;
+}
+
+.doctor-dashboard-nav-links li {
+    position: relative;
+}
+
+.doctor-dashboard-nav-links li:hover .doctor-dashboard-sub-menu {
+    display: block;
+}
+
+
+/* Media query for smaller devices */
+@media only screen and (max-width: 768px) {
+    .doctor-dashboard-section {
+        max-width: 250px; /* Adjust max-width for smaller devices */
+    }
+}
+
+/* Media query for even smaller devices */
+@media only screen and (max-width: 576px) {
+    .doctor-dashboard-section {
+        max-width: 200px; /* Adjust max-width for even smaller devices */
+    }
+}
