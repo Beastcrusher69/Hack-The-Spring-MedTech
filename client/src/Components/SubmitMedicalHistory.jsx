@@ -10,13 +10,13 @@ function SubmitMedicalHistory(){
     let [address , setAddress] = useState("");
     let [city , setCity] = useState("");
     let [birthdate , setBirthdate] = useState("");
-    let [occupation , setOccupation] = useState("");
     let [state , setState] = useState("");
     let [age , setAge] = useState("");
     let [gender , setGender] = useState("");
     let [files , setFiles] = useState("");
     let [previousMedicalHistory , setPreviousMedicalHistory] = useState("");
     let [isFilled , setIsFilled] = useState(true) ;
+    let [occupation , setOccupation] = useState("");
 
     let navigate = useNavigate() ;
     // let [user , setUser] = useState("") ;
@@ -103,6 +103,7 @@ function SubmitMedicalHistory(){
             .then((res)=>{
 
                 console.log(res.data) ;
+                navigate("/patient-dashboard") ;
 
             })
             .catch((err)=>{
@@ -114,15 +115,6 @@ function SubmitMedicalHistory(){
         else{
             setIsFilled(false) ;
         }
-
-        console.log("address : " , address , typeof(address));
-        console.log("city : " , city , typeof(city));
-        console.log("state : " , state , typeof(state));
-        console.log("birthdate : " , birthdate , typeof(birthdate));
-        console.log("age : " , age , typeof(age));
-        console.log("gender : " , gender , typeof(gender));
-        console.log("occupation : " , occupation , typeof(occupation));
-        console.log("urlarr[0] : " , URLarray[0] , typeof(URLarray[0]));
 
     }
 

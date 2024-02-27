@@ -76,8 +76,21 @@ const PatientSchema = mongoose.Schema({
      previousMedicalHistoryImageURLs : [String]
     })
 
+const DoctorSchema = mongoose.Schema({
+    emailId : String , 
+    address : String,
+    city : String ,
+    state : String ,
+    birthdate : String ,
+    age : Number ,
+    gender : String,
+    education : String,
+    personalID : String,
+   })
+
 const Users = mongoose.model("Users" , UserSchema) ;
 const Patients = mongoose.model("Patients" , PatientSchema) ;
+const Doctors = mongoose.model("Doctors" , DoctorSchema) ;
 
 app.get("/home" , (req , res)=>{
     res.json({
@@ -146,6 +159,27 @@ app.post("/submit-medical-history" , AuthenticateToken ,async (req , res)=>{
 
     console.log("patient data >>> " ,PatientData) ;
     Patients.create(PatientData) ;
+
+    res.json({code : 2 , message : "data saved successfully"});
+})
+
+app.post("/submit-doctor-details" , AuthenticateToken ,async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId});
+    
+    user.role = "doctor" ;
+
+    user.save() ;
+
+    let data = req.body ;
+    console.log("data >>> " ,data) ;
+
+    let DoctorData = {emailId ,...data } ;
+
+    console.log("doctor data >>> " , DoctorData) ;
+    Doctors.create(DoctorData) ;
 
     res.json({code : 2 , message : "data saved successfully"});
 })
