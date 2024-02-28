@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { be_url } from "/config"; 
 import { Navigate, useNavigate } from "react-router-dom";
-import "../CSS/DoctorDashBoard.css";
+import "../CSS/DoctorDashboard.css";
 
 function DoctorDashBoard() {
     let navigate = useNavigate();
