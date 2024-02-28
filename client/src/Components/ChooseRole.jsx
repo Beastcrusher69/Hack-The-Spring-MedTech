@@ -8,6 +8,13 @@ function ChooseRole(){
 
     let navigate = useNavigate() ;
     let [user , setUser] = useState("") ;
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
+
+    useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
 
     useEffect(()=>{
 
@@ -15,16 +22,32 @@ function ChooseRole(){
              .then((res)=>{
                 if(res.data.code == 2){
 
-                    let data = JSON.parse(window.localStorage.getItem("user")) ;
+                    if(res.data.role){
 
-                    if(data){
-                        setUser(data) ;
+                        if (lastVisitedPage) {
+                            navigate(lastVisitedPage);
+                        } else {
+                            navigate("/");
+                        }
+                        
                     }
+                    else{
+
+                        let data = JSON.parse(window.localStorage.getItem("user")) ;
+    
+                        if(data){
+                            setUser(data) ;
+                        }
+
+                    }
+
                 }
+
              })
              .catch((err)=>{
                 console.log(err) ;
-                navigate("/login");
+
+                navigate("/");
              })
 
     }, [])

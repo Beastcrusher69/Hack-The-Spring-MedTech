@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState ,useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import { be_url } from '/config';
 import {AiOutlineExclamationCircle} from "react-icons/ai";
@@ -11,6 +11,12 @@ function Login() {
     let [password,setPassword] = useState("");  
     let [ message , setMessage] = useState("");
     let navigate = useNavigate();
+
+    useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
 
     function login(e){
 
@@ -31,7 +37,18 @@ function Login() {
                     else{
 
                         window.localStorage.setItem("user" , JSON.stringify(res.data.user)) ;
-                        navigate("/explore");
+
+                        if(res.data.role){
+                            if(res.data.role == "patient"){
+                                navigate("/patient-dashboard");
+                            }
+                            else{
+                                navigate("/doctor-dashboard");
+                            }
+                        }
+                        else{
+                            navigate("/choose-role");
+                        }
                     }
                   }) 
                   .catch((err)=>{

@@ -16,25 +16,39 @@ function SubmitDoctorDetails(){
     let [education, setEducation] = useState("");
     let [personalID, setPersonalID] = useState("");
     let [isFilled , setIsFilled] = useState(true) ;
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
 
     let navigate = useNavigate() ;
 
     useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
 
-        axios.get(be_url + "/submit-medical-history" , {withCredentials : true} )
+    useEffect(()=>{
+
+        axios.get(be_url + "/submit-doctor-details" , {withCredentials : true} )
              .then((res)=>{
-                if(res.data.code == 2){
+                if(res.data.code == 2 ){
 
-                    // let data = JSON.parse(window.localStorage.getItem("user")) ;
-
-                    // if(data){
-                    //     setUser(data) ;
-                    // }
+                    if(res.data.role){
+                        if (lastVisitedPage) {
+                            navigate(lastVisitedPage);
+                        } else {
+                            navigate("/");
+                        }
+                    }
+                    else{
+                        console.log(res.data) ;
+                    }
                 }
+    
              })
              .catch((err)=>{
                 console.log(err) ;
-                navigate("/login");
+
+                navigate("/");
              })
 
     }, [])
@@ -60,20 +74,16 @@ function SubmitDoctorDetails(){
 
     }
 
-    function handleSubmit(){
-        
-    }
-
     function handleSubmit(e){
 
         e.preventDefault() ;
 
-        if(address != "" && city != "" && state != "" && birthdate != "" && gender != "" && education != "" && personalID != ""){ // change
+        if(address !== "" && city !== "" && state !== "" && birthdate !== "" && gender !== "" && education !== "" && personalID !== ""){ // change
 
             axios.post(be_url + "/submit-doctor-details" , { address , city , state , birthdate , age , gender , education , personalID} , {withCredentials : true})
             .then((res)=>{
 
-                console.log(res.data) ;
+                console.log("res.data" , res.data) ;
                 navigate("/doctor-dashboard") ;
 
             })
@@ -83,6 +93,7 @@ function SubmitDoctorDetails(){
 
         }
         else{
+            console.log("false") ;
             setIsFilled(false) ;
         }
 
@@ -92,6 +103,9 @@ function SubmitDoctorDetails(){
         console.log("birthdate : " , birthdate , typeof(birthdate));
         console.log("age : " , age , typeof(age));
         console.log("gender : " , gender , typeof(gender));
+        console.log("education : " , education , typeof(education));
+        console.log("personalID : " , personalID , typeof(personalID));
+
 
     }
 
@@ -160,6 +174,7 @@ function SubmitDoctorDetails(){
     
         <label htmlFor="gender">Gender:</label>
         <select id="doctor-form-gender" name="gender"  onChange={(e)=>{setGender(e.target.value)}}>
+            <option value="" >Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Transgender</option>

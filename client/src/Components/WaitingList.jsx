@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { be_url } from "/config"; 
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../CSS/WaitingList.css";
 
 const WaitingList = () => {
+
+    let navigate = useNavigate();
+
     const [appointments, setAppointments] = useState([
         { id: 1, patientName: "John Doe", date: "2024-02-23", time: "10:00 AM", reason: "Regular Checkup", age: "Child", gender: "Male" },
         { id: 2, patientName: "Jane Smith", date: "2024-02-24", time: "01:06 AM", reason: "Dental Cleaning", age: "MiddleAgge", gender: "Male" },
@@ -12,6 +15,37 @@ const WaitingList = () => {
         { id: 4, patientName: "Glen Smith", date: "2024-01-01", time: "11:30 AM", reason: "Operation", age: "Adult", gender: "Female" },
         { id: 5, patientName: "oontie ith", date: "2023-12-25", time: "04:30 PM", reason: "Operation", age: "Old", gender: "Female" }
     ]);
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
+
+    useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
+
+    useEffect(()=>{
+
+        axios.get(be_url + "/waiting-list" , {withCredentials : true} )
+             .then((res)=>{
+                if(res.data.code == 2 && res.data.role == "doctor"){
+
+                    console.log(res.data) ;
+
+                }
+                else{
+                    if (lastVisitedPage) {
+                        navigate(lastVisitedPage);
+                    } else {
+                        navigate("/");
+                    }
+                }
+             })
+             .catch((err)=>{
+                console.log(err) ;
+                navigate("/");
+             })
+
+    }, [])
 
     useEffect(() => {
         displayAppointments(appointments);

@@ -1,11 +1,43 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { be_url } from "/config"; 
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../CSS/DoctorDashboard.css";
 
 function DoctorDashBoard() {
     let navigate = useNavigate();
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
+
+
+    useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
+
+    useEffect(()=>{
+
+        axios.get(be_url + "/doctor-dashboard" , {withCredentials : true} )
+             .then((res)=>{
+                if(res.data.code == 2 && res.data.role == "doctor"){
+
+                    console.log(res.data) ;
+
+                }
+                else{
+                    if (lastVisitedPage) {
+                        navigate(lastVisitedPage);
+                    } else {
+                        navigate("/");
+                    }
+                }
+             })
+             .catch((err)=>{
+                console.log(err) ;
+                navigate("/");
+             })
+
+    }, [])
 
     const toggleNav = () => {
         var navLinks = document.querySelector('.doctor-dashboard-nav-links');
@@ -99,6 +131,15 @@ function DoctorDashBoard() {
                         <button 
                         // href="#"
                         >Patients Page</button>
+                    </section>
+
+                    <section className="doctor-dashboard-section">
+                    <h2>Submit Availability</h2>
+                    <button 
+                    // href="#Path to Doctor Availability JSX Page"
+                    onClick={()=>{navigate("/submit-availibility")}}
+                    >Submit Your Availability</button>
+
                     </section>
                 </div>
             </main>

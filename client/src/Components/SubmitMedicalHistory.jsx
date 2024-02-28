@@ -17,26 +17,39 @@ function SubmitMedicalHistory(){
     let [previousMedicalHistory , setPreviousMedicalHistory] = useState("");
     let [isFilled , setIsFilled] = useState(true) ;
     let [occupation , setOccupation] = useState("");
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
 
     let navigate = useNavigate() ;
     // let [user , setUser] = useState("") ;
 
     useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
+
+    useEffect(()=>{
 
         axios.get(be_url + "/submit-medical-history" , {withCredentials : true} )
              .then((res)=>{
-                if(res.data.code == 2){
+                if(res.data.code == 2) {
 
-                    // let data = JSON.parse(window.localStorage.getItem("user")) ;
-
-                    // if(data){
-                    //     setUser(data) ;
-                    // }
+                    if(res.data.role){
+                        if (lastVisitedPage) {
+                            navigate(lastVisitedPage);
+                        } else {
+                            navigate("/");
+                        }
+                    }
+                    else{
+                        console.log(res.data) ;
+                    }
                 }
+            
              })
              .catch((err)=>{
                 console.log(err) ;
-                navigate("/login");
+                navigate("/");
              })
 
     }, [])

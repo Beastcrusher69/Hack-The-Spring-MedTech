@@ -25,6 +25,12 @@ function Signup() {
 
     let navigate = useNavigate();
 
+    useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
+
     function handleEmailValidity(n,e){
 
         if(n==1){

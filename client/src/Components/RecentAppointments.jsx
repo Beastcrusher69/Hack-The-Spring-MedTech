@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { be_url } from "/config";
+import { useNavigate } from 'react-router-dom';
 import '../CSS/RecentAppointments.css';
 
 function RecentAppointments() {
+    let navigate = useNavigate();
+
     const [sortBy, setSortBy] = useState(null);
     const [filterByStatus, setFilterByStatus] = useState('all');
     const originalAppointments = [
@@ -12,6 +17,37 @@ function RecentAppointments() {
         { id: 5, patientName: "oontie ith", date: "2023-12-25", time: "04:30 PM", reason: "Operation", status: "cancelled" }
     ];
     const [filteredAppointments, setFilteredAppointments] = useState(originalAppointments);
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
+
+    useEffect(()=>{
+        window.addEventListener('beforeunload', () => {
+          localStorage.setItem('lastVisitedPage', window.location.pathname);
+        });
+      })
+
+    useEffect(()=>{
+
+        axios.get(be_url + "/recent-appointments" , {withCredentials : true} )
+             .then((res)=>{
+                if(res.data.code == 2 && res.data.role == "doctor"){
+
+                    console.log(res.data) ;
+
+                }
+                else{
+                    if (lastVisitedPage) {
+                        navigate(lastVisitedPage);
+                    } else {
+                        navigate("/");
+                    }
+                }
+             })
+             .catch((err)=>{
+                console.log(err) ;
+                navigate("/");
+             })
+
+    }, [])
 
     useEffect(()=>{
 

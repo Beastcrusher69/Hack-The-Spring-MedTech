@@ -128,18 +128,117 @@ app.post("/signup" , async (req , res)=>{
     res.json({code : 2 , "user" : { firstName , lastName}});    
 })
 
-// app.post("/login") ;
+app.post("/login" , async (req , res)=>{
+
+    let { emailId , password } = req.body ;
+
+    let user = await Users.findOne({emailId});
+    let payload = { emailId };
+
+    if(!user || (password != user.password)){
+        res.json({ code : 1 , message : "email or password is incorrect"});
+    }
+    else{
+
+        let token = jwt.sign( payload , process.env.ACCESS_TOKEN_SECRET);
+
+        let {firstName , lastName , role} = user;
+
+        user = {firstName , lastName };
+
+        res.cookie("authToken" , token ,{ httpOnly : true , sameSite : "none" , secure : true})
+        res.json({ code : 2 , user , role});
+
+    }
+
+})
 
 app.get("/choose-role" ,
  AuthenticateToken ,
-(req , res)=>{
-    res.json({code : 2 , message : "valid user"});
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ;
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
 })
 
 app.get("/submit-medical-history" ,
  AuthenticateToken ,
-(req , res)=>{
-    res.json({code : 2 , message : "valid user"});
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/submit-doctor-details" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/patient-dashboard" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/doctor-dashboard" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/recent-appointments" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/waiting-list" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/submit-availibility" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
 })
 
 app.post("/submit-medical-history" , AuthenticateToken ,async (req , res)=>{
