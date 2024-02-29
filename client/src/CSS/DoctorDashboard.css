@@ -1,16 +1,18 @@
 #doctor-dashboard-header {
-    background-color: #fbf8f8;
-    color: rgb(20, 20, 20);
-    padding: 15px 20px;
+    background-color: #3498db;
+    color:#fff;
+    padding: 10px 20px;
+    margin: 3px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 4px;
-    margin-bottom: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .doctor-dashboard-welcome {
-    font-size: 1.5rem;
+    /* font-size: 1.2rem; */
+    margin:8px;
 }
 
 #doctor-dashboard-nav > ul {
@@ -18,174 +20,225 @@
     margin: 0;
     padding: 0;
     display: flex;
-    font-size: large;
 }
 
-#doctor-dashboard-nav > ul li {
-    margin-right: 22px;
+#doctor-dashboard-nav ul li {
+    margin-right: 20px;
 }
 
-#doctor-dashboard-nav > ul li a {
-    color: rgb(35, 35, 35);
+#doctor-dashboard-nav > ul li button {
+    color: #fff;
     text-decoration: none;
-    transition: color 0.5s;
-}
-
-#doctor-dashboard-nav > ul li a:hover {
-    color: blue;
-}
-
-.doctor-dashboard-burger {
-    display: none;
-    flex-direction: column;
+    background-color: transparent;
+    border: none;
+    font-weight: 400;
+    font-size: 18px;
     cursor: pointer;
 }
 
-.doctor-dashboard-burger div {
-    width: 25px;
-    height: 3px;
-    background-color: rgb(35, 35, 35);
-    margin: 3px;
-    transition: all 0.3s ease;
+#doctor-dashboard-nav > ul li button::after {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2.5px;
+    border-radius: 4px;
+    left: 50%;
+    position: absolute;
+    bottom: auto;
+    background: #fff;
+    transition: width 0.9s ease 0s, left .3s ease 0s;
+    width: 0;
 }
 
+#doctor-dashboard-nav ul li button:hover:after{ 
+    width: 100%; 
+    left: 0; 
+}
 
-@media (max-width: 768px) {
-    #doctor-dashboard-nav > ul {
+.doctor-dashboard-menu-toggle {
+    display: none;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out; 
+}
+
+.doctor-dashboard-menu-toggle span {
+    display:block;
+    width: 30px;
+    height: 5px;
+    background-color: #fff;
+    margin-bottom: 5px;
+    transition: all 0.3s ease-in-out;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px
+}
+
+.doctor-dashboard-menu {
+    display: flex;
+}
+
+.doctor-dashboard-menu-toggle.active {
+    transform: rotate(90deg);
+}
+
+@media screen and (max-width: 768px) {
+    .doctor-dashboard-menu {
         display: none;
     }
 
-    .doctor-dashboard-burger {
-        display: flex;
+    .doctor-dashboard-menu-toggle {
+        display: block;
     }
 
+    #doctor-dashboard-header {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        flex-direction: row-reverse;
+    }
+
+    #doctor-dashboard-nav ul {
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 4em;
+        left: 8%; 
+        transform: translateX(-8%); 
+        width:max-content; 
+        max-width: 400px; 
+        border-radius: 8px;
+        padding-left: 5px;
+        padding-right: 10px;
+        background-color: #0b7dc8;
+        z-index: 1;
+        display: none;
+    }
+    
+
+    #doctor-dashboard-nav ul.show {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    #doctor-dashboard-nav li {
+        margin: 4%;
+    }
 }
+
 
 .doctor-dashboard-main {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
+    margin:3px;
     height: 100vh;
-    display:flex;
-    justify-content: space-around;
     background-image: url('/public/doctor-bg.jpg'); 
     background-size:cover;
     background-position:center; 
+    overflow: auto;
+}
+
+.doctor-dashboard-main::-webkit-scrollbar {
+    width: 0;
+    background: transparent; 
 }
 
 .doctor-dashboard-container {
     display: flex;
-    justify-content:space-evenly;
-    flex-direction: row;
+    justify-content: center;
     flex-wrap: wrap;
-    align-content: flex-start;
-    align-items: stretch;
 }
 
 .doctor-dashboard-section {
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
     margin: 10px;
-    width: max-content;
-    height: auto;
-    max-height: 140px ;
+    width: 320px;
     text-wrap: balance;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
-    /* flex: 1; */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.225);
 }
 
 .doctor-dashboard-section h2 {
-    color: #1e1e1e;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
+    color: #02568f;
+    font-size: 1.6rem;
 }
 
-.doctor-dashboard-section a {
-    display: block;
-    text-decoration: none;
-    color: rgb(0, 0, 255);
-    font-size: 1rem;
-    margin-top: 5px;
+.doctor-dashboard-section p {
+    font-size: large;
 }
-.doctor-dashboard-section a:hover {
-    text-decoration: underline;
+
+.doctor-dashboard-section button {
+    color:#3498db;
+    text-decoration: none;
+    background-color: transparent;
+    font-size: large;
+    border: none;
+    cursor: pointer;
+}
+
+.doctor-dashboard-section button:hover {
+    text-decoration:underline;
     color: rgb(0, 0, 183);
+    text-shadow: rgba(0, 0, 0, 0.225);
 }
 
 #doctor-dashboard-footer {
-    background-color: #2b2b2b;
+    background-color:#3498db;
     color: white;
-    padding: 12px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    /* padding: 12px 15px; */
+    padding: 10px;
     border-radius: 7px;
     margin-top: 2px;
-}
-
-.doctor-dashboard-footer-content {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .doctor-dashboard-contact-info,
 .doctor-dashboard-quick-links,
 .doctor-dashboard-legal-info {
-    flex: 1;
+    width: 280px;
+    text-align: left;
+    vertical-align: bottom;
 }
 
-.doctor-dashboard-contact-info h3,
-.doctor-dashboard-quick-links h3,
-.doctor-dashboard-legal-info p {
-    margin-bottom: 10px;
-}
-
-.doctor-dashboard-contact-info p,
-.doctor-dashboard-quick-links ul,
-.doctor-dashboard-legal-info p {
-    margin: 0;
-}
-.doctor-dashboard-legal-info a {
+.doctor-dashboard-legal-info button,
+.doctor-dashboard-quick-links ul li button {
     text-decoration:none;
-    color: white;
-}
-.doctor-dashboard-quick-links ul {
-    padding: 0;
-    list-style: none;
-}
-
-.doctor-dashboard-quick-links ul li {
-    margin-bottom: 5px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-size: medium;
 }
 
-.doctor-dashboard-quick-links ul li a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.5s;
+.doctor-dashboard-quick-links ul li::marker {
+    content: '🔗';
 }
 
-.doctor-dashboard-quick-links ul li a:hover, .doctor-dashboard-legal-info a:hover {
-    color:red;
-}
 
 .doctor-dashboard-nav-links .doctor-dashboard-sub-menu {
     display: none;
     position: absolute;
-    background-color: #ececec;
+    top: 25px;
+    list-style: none;
+    background-color:#02568f;
     border-radius: 4px;
-    padding: 10px;
+    padding: 5px;
     z-index: 1;
+    cursor: pointer;
 }
 
 .doctor-dashboard-nav-links .doctor-dashboard-sub-menu li {
-    margin: 5px 0;
-}
-
-.doctor-dashboard-nav-links .doctor-dashboard-sub-menu li a:hover {
-    color: blue;
+    margin: 5px;
 }
 
 .doctor-dashboard-nav-links li {
@@ -197,16 +250,14 @@
 }
 
 
-/* Media query for smaller devices */
 @media only screen and (max-width: 768px) {
     .doctor-dashboard-section {
-        max-width: 250px; /* Adjust max-width for smaller devices */
+        max-width: 80%; 
     }
 }
 
-/* Media query for even smaller devices */
 @media only screen and (max-width: 576px) {
     .doctor-dashboard-section {
-        max-width: 200px; /* Adjust max-width for even smaller devices */
+        max-width: 80%;
     }
 }

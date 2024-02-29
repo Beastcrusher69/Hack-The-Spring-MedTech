@@ -1,8 +1,9 @@
 
 #recent-app-appointmentsTable {
-    width: 100%;
+    width: 99%;
     border-collapse: collapse;
     border-spacing: 0;
+    margin: 5px;
 }
 
 #recent-app-appointmentsTable th,
@@ -17,6 +18,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
+    color: #02568f;
 }
 
 #recent-app-appointmentsTable thead th {
@@ -30,20 +32,24 @@
 }
 
 #recent-app-appointmentsTable tr:hover {
-    background-color: #f5f5f5;
+    background-color: #f4f4f4;
 }
 
 #recent-app-herotext {
     text-align: center;
+    color: #02568f;
 }
 
 #recent-app-searchInput{
     margin-left: 10px;
 }
 
+#recent-app-serchbar {
+    margin-left: 20px;
+}
 .recent-app-controls {
     display: flex;
-    justify-content: flex-start; /* Adjusted to flex-start */
+    justify-content: flex-start; 
     align-items: center;
 }
 
@@ -51,10 +57,28 @@
 .recent-app-filter {
     display: flex;
     align-items: center;
-    margin-left: 20px; /* Adjusted for consistency */
+    margin-left: 20px;
 }
 
 .recent-app-sort button,
-.recent-app-filter select {
+.recent-app-filter select,
+#recent-app-searchInput {
     margin-left: 10px;
+    color:#02568f;
+    background: none;
+    border-color:#3498db;
+    border-radius: 5px;
+    border-width: 1.5px;
+}
+
+#recent-app-viewdetailsbutton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #3498db;
+    font-size: medium;
+}
+
+#recent-app-viewdetailsbutton:hover {
+    color:#02568f;
 }

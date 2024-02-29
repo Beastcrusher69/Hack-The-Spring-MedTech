@@ -5,10 +5,10 @@ import {useNavigate} from "react-router-dom";
 import "../CSS/Chatbox.css";
 import {IoClose} from "react-icons/io5"
 
-function Chatbox(){
+function Chatbox({ displayChatbox , setDisplayChatbox }){
 
     return(
-        <div id="chatbox">
+        <div id="chatbox" >
 
             <section className="msger">
 
@@ -16,9 +16,9 @@ function Chatbox(){
           <div className="msger-header-title">
             <i className="fas fa-comment-alt"></i> medicalchat
           </div>
-          <div className="msger-header-options">
+          {/* <div className="msger-header-options">
             <span><i className="fas fa-cog"></i></span>
-          </div>
+          </div> */}
           <IoClose className="close-btn" onClick={()=>{ setDisplayChatbox(!displayChatbox) }}></IoClose>
         </header>
       

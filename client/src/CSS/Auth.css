@@ -1,6 +1,8 @@
 .projectname{
   font-family: 'Lobster Two', sans-serif;
-  font-weight: 300;
+  color: #02568f;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 #signup-login-wrap{
@@ -34,19 +36,22 @@
 
 
 .auth-wrap{
-    height:100vh;
+    height: 100vh;
     display: grid;
-    place-items:center;
+    justify-content: center;
   }
 
   .auth-form{
-    width:400px;
+    width:420px;
+    height: auto;
     display: flex;
     flex-direction: column;
-    padding:20px;
-    box-shadow: 0px 0px 8px 0px;
-    border-radius:20px;
+    padding:10px;
+    margin: 20px;
+    box-shadow: 0 0 0.4rem 0.4rem rgba(31, 106, 219, 0.25);
+    border-radius:15px;
     color:var(--dark);
+    align-self: center;
   }
 
   .auth-projectname{
@@ -55,32 +60,33 @@
   }
 
   .auth-form > *:not(label){
-    margin-bottom:20px;
+    margin-bottom:15px;
   }
 
   .auth-form input {
-    height:35px;
+    height:auto;
     border:none;
     background-color: #E6E6E6;
     border-radius: 5px;
     padding:10px;
+    width: auto;
   }
 
   #username-wrap{
     display:flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
 
-  #username-wrap input{
+  /* #username-wrap input{
     width:100%;
   }
 
   #username-wrap label{
-    width:49%;
-  }
+    width:45%;
+  } */
 
   .auth-form label{
-    font-size:12px;
+    font-size:15px;
     font-family: 'Poppins';
   }
 
@@ -94,7 +100,7 @@
   }
   
   #signup-btn,#login-btn{
-    background-color: var(--dark);
+    background-color: #02568f;
     color:white;
   }
 
@@ -105,13 +111,13 @@
 
   .line{
     height:1px;
-    background-color: grey;
+    background-color:#02568f;
     width:40%;
     border-radius: 0.5px;
   }
 
   .or{
-    color:grey;
+    color:#02568f;
     font-family: poppins;
     width:20%;
     text-align: center;

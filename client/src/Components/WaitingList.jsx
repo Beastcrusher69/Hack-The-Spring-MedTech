@@ -8,13 +8,7 @@ const WaitingList = () => {
 
     let navigate = useNavigate();
 
-    const [appointments, setAppointments] = useState([
-        { id: 1, patientName: "John Doe", date: "2024-02-23", time: "10:00 AM", reason: "Regular Checkup", age: "Child", gender: "Male" },
-        { id: 2, patientName: "Jane Smith", date: "2024-02-24", time: "01:06 AM", reason: "Dental Cleaning", age: "MiddleAgge", gender: "Male" },
-        { id: 3, patientName: "Dhiraj Prajapati", date: "2024-02-22", time: "09:30 AM", reason: "Consultant", age: "Adult", gender: "Male" },
-        { id: 4, patientName: "Glen Smith", date: "2024-01-01", time: "11:30 AM", reason: "Operation", age: "Adult", gender: "Female" },
-        { id: 5, patientName: "oontie ith", date: "2023-12-25", time: "04:30 PM", reason: "Operation", age: "Old", gender: "Female" }
-    ]);
+    const [appointments, setAppointments] = useState([]);
     const lastVisitedPage = localStorage.getItem('lastVisitedPage');
 
     useEffect(()=>{
@@ -30,6 +24,8 @@ const WaitingList = () => {
                 if(res.data.code == 2 && res.data.role == "doctor"){
 
                     console.log(res.data) ;
+
+                    setAppointments(res.data.appointments)
 
                 }
                 else{
@@ -49,23 +45,26 @@ const WaitingList = () => {
 
     useEffect(() => {
         displayAppointments(appointments);
-    }, []);
+    }, [appointments]);
 
     const displayAppointments = (appointmentsToDisplay) => {
         const tableBody = document.querySelector('#wait-list-appointmentsTable tbody');
+    
+        // Clear previous content
         tableBody.innerHTML = '';
-
+    
+        // Append each appointment to the table body
         appointmentsToDisplay.forEach(appointment => {
             const row = tableBody.insertRow();
-            row.insertCell(0).textContent = appointment.id;
-            row.insertCell(1).textContent = appointment.patientName;
-            row.insertCell(2).textContent = appointment.date;
-            row.insertCell(3).textContent = appointment.time;
-            row.insertCell(4).textContent = appointment.reason;
-            row.insertCell(5).textContent = appointment.age;
-            row.insertCell(6).textContent = appointment.gender;
-
-            const actionCell = row.insertCell(7);
+            // row.insertCell(0).textContent = appointment.id;
+            row.insertCell(0).textContent = appointment.patientName;
+            row.insertCell(1).textContent = appointment.date;
+            row.insertCell(2).textContent = appointment.time;
+            row.insertCell(3).textContent = appointment.reason;
+            row.insertCell(4).textContent = appointment.age;
+            row.insertCell(5).textContent = appointment.gender;
+    
+            const actionCell = row.insertCell(6);
             const acceptButton = document.createElement('button');
             acceptButton.textContent = 'Accept';
             acceptButton.addEventListener('click', () => {
@@ -80,6 +79,7 @@ const WaitingList = () => {
             actionCell.appendChild(rejectButton);
         });
     }
+    
 
     const filterAppointments = () => {
         const ageFilter = document.getElementById('wait-list-ageFilter').value;
@@ -165,7 +165,7 @@ const WaitingList = () => {
             <table id="wait-list-appointmentsTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        {/* <th>ID</th> */}
                         <th>Patient Name</th>
                         <th>Date</th>
                         <th>Time</th>

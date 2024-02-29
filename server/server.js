@@ -9,8 +9,8 @@ const mongoUri = process.env.MONGO_URI ;
 const port = 4000 ;
 
 const corsOptions = {
-    // origin : "http://localhost:5173",
-    origin : "https://hack-the-spring-med-tech.vercel.app",
+    origin : "http://localhost:5173",
+    // origin : "https://hack-the-spring-med-tech.vercel.app",
     credentials : true,
     optionSuccessStatus : 200 
 }
@@ -73,7 +73,16 @@ const PatientSchema = mongoose.Schema({
      gender : String,
      occupation : String,
      previousMedicalHistory : String,
-     previousMedicalHistoryImageURLs : [String]
+     previousMedicalHistoryImageURLs : [String],
+     myAppoinments : [
+        {
+            emailId : String,
+            date : String ,
+            time : String,
+            reason : String ,
+            status : String
+        }
+     ] 
     })
 
 const DoctorSchema = mongoose.Schema({
@@ -86,6 +95,19 @@ const DoctorSchema = mongoose.Schema({
     gender : String,
     education : String,
     personalID : String,
+    waitingList : [{
+        emailId : String ,
+        date : String ,
+        time : String ,
+        reason : String,
+    }] ,
+    appointments : [{
+        emailId : String ,
+        date : String ,
+        time : String ,
+        reason : String,
+        status : String
+    }]
    })
 
 const Users = mongoose.model("Users" , UserSchema) ;
@@ -205,30 +227,107 @@ async (req , res)=>{
 
     let user = await Users.findOne({emailId}) ; 
 
-    res.json({code : 2 , message : "valid user" , role : user.role});
+    let doctor = await Doctors.findOne({emailId}) ;
+
+    let waitingListCount = doctor.waitingList.length ;
+
+    let {appointments} = doctor ;
+    // console.log(appointments) ;
+
+    let cancelledAppointmentsCount = appointments.filter((obj)=>{
+        return obj.status === "cancelled" ;
+    }).length ;
+    let scheduledAppointmentsCount = appointments.filter((obj)=>{
+        return obj.status === "scheduled" ;
+    }).length ;
+    let completedCheckupsCount = appointments.filter((obj)=>{
+        return obj.status === "completed" ;
+    }).length ;
+
+    res.json({code : 2 , message : "valid user" , role : user.role , waitingListCount ,cancelledAppointmentsCount , scheduledAppointmentsCount ,completedCheckupsCount});
 })
 
 app.get("/recent-appointments" ,
  AuthenticateToken ,
 async (req , res)=>{
 
-    let emailId = req.payload.emailId ;
+    let emailId = req.payload.emailId;
+    let user = await Users.findOne({ emailId });
+    let doctor = await Doctors.findOne({ emailId });
+    let appointments = doctor.appointments;
 
-    let user = await Users.findOne({emailId}) ; 
+    // Use Promise.all to wait for all asynchronous operations to complete
+    let originalAppointments = await Promise.all(appointments.map(async (obj) => {
+        let newObj;
+        let { date, time, reason , status } = obj;
+        let Puser = await Users.findOne({ emailId: obj.emailId });
+        let { firstName, lastName } = Puser;
 
-    res.json({code : 2 , message : "valid user" , role : user.role});
+        newObj = {
+            patientName: [firstName, lastName].join(" "),
+            date,
+            time,
+            reason,
+            status
+        };
+
+        return newObj; // Return the appointment object
+    }));
+
+    res.json({code : 2 , message : "valid user" , role : user.role , originalAppointments});
 })
 
-app.get("/waiting-list" ,
- AuthenticateToken ,
-async (req , res)=>{
+app.get("/waiting-list", AuthenticateToken, async (req, res) => {
+    let emailId = req.payload.emailId;
+    let user = await Users.findOne({ emailId });
+    let doctor = await Doctors.findOne({ emailId });
+    let waitingList = doctor.waitingList;
 
-    let emailId = req.payload.emailId ;
+    // Use Promise.all to wait for all asynchronous operations to complete
+    let appointments = await Promise.all(waitingList.map(async (obj) => {
+        let newObj;
+        let { date, time, reason } = obj;
+        let Puser = await Users.findOne({ emailId: obj.emailId });
+        let { firstName, lastName } = Puser;
 
-    let user = await Users.findOne({emailId}) ; 
+        let patient = await Patients.findOne({ emailId: obj.emailId });
+        let { age, gender } = patient;
 
-    res.json({code : 2 , message : "valid user" , role : user.role});
-})
+        let ageRange;
+
+        if (age <= 17) {
+            ageRange = "Child";
+        } else if (age >= 18 && age <= 39) {
+            ageRange = "Adult";
+        } else if (age >= 40 && age <= 64) {
+            ageRange = "MiddleAge";
+        } else {
+            ageRange = "Old";
+        }
+
+        newObj = {
+            patientName: [firstName, lastName].join(" "),
+            age: ageRange,
+            gender,
+            date,
+            time,
+            reason
+        };
+
+        return newObj; // Return the appointment object
+    }));
+
+    console.log(appointments);
+    res.json({ code: 2, message: "valid user", role: user.role, appointments });
+});
+
+app.get("/submit-availibility", AuthenticateToken, async (req, res) => {
+    let emailId = req.payload.emailId;
+    let user = await Users.findOne({ emailId });
+    res.json({ code: 2, message: "valid user", role: user.role });
+});
+
+
 
 app.get("/submit-availibility" ,
  AuthenticateToken ,

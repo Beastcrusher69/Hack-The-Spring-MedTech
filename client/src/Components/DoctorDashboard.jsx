@@ -6,8 +6,14 @@ import "../CSS/DoctorDashboard.css";
 
 function DoctorDashBoard() {
     let navigate = useNavigate();
-    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
+    let [waitingListCount , setWaitingListCount] = useState("") ;
+    let [scheduledAppointmentsCount , setScheduledAppointmentsCount] = useState("") ;
+    let [completedCheckupsCount , setCompletedCheckupsCount] = useState("") ;
+    let [cancelledAppointmentsCount , setCancelledAppointmentsCount] = useState("") ;
+    let [firstName , setFirstName] = useState("") ;
+    let [lastName , setLastName] = useState("") ;
 
+    const lastVisitedPage = localStorage.getItem('lastVisitedPage');
 
     useEffect(()=>{
         window.addEventListener('beforeunload', () => {
@@ -16,12 +22,24 @@ function DoctorDashBoard() {
       })
 
     useEffect(()=>{
+        let user = JSON.parse(window.localStorage.getItem("user")) ;
+
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+    } , [])  
+
+    useEffect(()=>{
 
         axios.get(be_url + "/doctor-dashboard" , {withCredentials : true} )
              .then((res)=>{
                 if(res.data.code == 2 && res.data.role == "doctor"){
 
                     console.log(res.data) ;
+
+                    setCancelledAppointmentsCount(res.data.cancelledAppointmentsCount);
+                    setCompletedCheckupsCount(res.data.completedCheckupsCount);
+                    setScheduledAppointmentsCount(res.data.scheduledAppointmentsCount);
+                    setWaitingListCount(res.data.waitingListCount) ;
 
                 }
                 else{
@@ -57,7 +75,7 @@ function DoctorDashBoard() {
     return (
         <div>
             <header id="doctor-dashboard-header">
-                <div className="doctor-dashboard-welcome">Welcome, Dhiraj Prajapati</div>
+                <div className="doctor-dashboard-welcome">Welcome, {firstName} {lastName}</div>
                 <nav id="doctor-dashboard-nav">
                     <ul className="doctor-dashboard-nav-links">
                         <li>
@@ -96,15 +114,15 @@ function DoctorDashBoard() {
                 <div className="doctor-dashboard-container">
                     <section className="doctor-dashboard-section">
                         <h2>Scheduled Appointments</h2>
-                        <p>Total Pending Appointments: <span id="pendingAppointmentsCount">0</span></p>
+                        <p>Total Scheduled Appointments: <span id="scheduledAppointmentsCount">{scheduledAppointmentsCount}</span></p>
                         <button 
-                        // href="recentAppointments.html?filter=pending"
-                        onClick={()=>{const filter = 'pending'; navigate(`/recent-appointments?filter=${filter}`); }}
-                        >View Pending Appointments</button>
+                        // href="recentAppointments.html?filter=Scheduled"
+                        onClick={()=>{const filter = 'scheduled'; navigate(`/recent-appointments?filter=${filter}`); }}
+                        >View Scheduled Appointments</button>
                     </section>
                     <section className="doctor-dashboard-section">
                         <h2>Completed Checkups</h2>
-                        <p>Total Completed Appointments: <span id="completedAppointmentsCount">0</span></p>
+                        <p>Total Completed Appointments: <span id="completedAppointmentsCount">{completedCheckupsCount}</span></p>
                         <button 
                         // href="recentAppointments.html?filter=completed"
                         onClick={()=>{const filter = 'completed'; navigate(`/recent-appointments?filter=${filter}`); }}
@@ -112,7 +130,7 @@ function DoctorDashBoard() {
                     </section>
                     <section className="doctor-dashboard-section">
                         <h2>Wait-List</h2>
-                        <p>Total Appointments in queue: <span id="totalAppointmentsCountinQueue">0</span></p>
+                        <p>Total Appointments in queue: <span id="totalAppointmentsCountinQueue">{waitingListCount}</span></p>
                         <button 
                         // href="waitingList.html"
                         onClick={()=>{navigate("/waiting-list"); }}
@@ -120,7 +138,7 @@ function DoctorDashBoard() {
                     </section>
                     <section className="doctor-dashboard-section">
                         <h2>Cancelled Appointment</h2>
-                        <p>Total cancelled Appointments: <span id="totalcancelledAppointmentsCount">0</span></p>
+                        <p>Total cancelled Appointments: <span id="totalcancelledAppointmentsCount">{cancelledAppointmentsCount}</span></p>
                         <button 
                         // href="recentAppointments.html?filter=cancelled"
                         onClick={()=>{const filter = 'cancelled'; navigate(`/recent-appointments?filter=${filter}`); }}

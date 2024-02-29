@@ -19,18 +19,35 @@
   }
   
   #chatbox {
+    position: fixed;
     display: grid;
     place-items: center;
     height: 100vh;
-    /* background-image: var(--body-bg); */
+    width : 100% ;
+    background-color: rgba(0 , 0 , 0 , 0.5);
     font-family: Helvetica, sans-serif;
+
+  }
+
+  .close-btn{
+    font-size: 1.2rem;
+    cursor : pointer ;
+  }
+
+  .close-btn{
+    font-size: 1.2rem;
+    cursor : pointer ;
+  }
+
+  .close-btn:hover{
+    color : rgb(128, 185, 255) ;
   }
   
   .msger {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
-    width: min(867px ,90%);
+    width: min(600px ,90%);
     /* max-width: 867px; */
     /* margin: 25px 10px; */
     height: 70%;

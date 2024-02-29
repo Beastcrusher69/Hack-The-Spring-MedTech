@@ -1,0 +1,390 @@
+.patient-homepage-body {
+    font-family: "Kumbh Sans", 'Roboto','Open Sans','Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.patient-homepage-container {
+    margin: 3px;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.patient-homepage-header {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#patient-homepage-h1 {
+    margin-left: 20px;
+    font-size: 24px;
+}
+
+#patient-homepage-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+#patient-homepage-nav ul li {
+    margin-right: 20px;
+}
+
+#patient-homepage-nav ul li a, .patient-homepage-btn-logout{
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.patient-homepage-btn-logout {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+#patient-homepage-nav ul li a:after,
+.patient-homepage-btn-logout:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2.5px;
+    border-radius: 4px;
+    left: 50%;
+    position: absolute;
+    bottom: auto;
+    background: #fff;
+    transition: width 0.9s ease 0s, left .3s ease 0s;
+    width: 0;
+}
+
+#patient-homepage-nav ul li a:hover:after, .patient-homepage-btn-logout:hover::after { 
+    width: 100%; 
+    left: 0; 
+}
+
+@media screen and (max-height: 300px) {
+    #patient-homepage-nav ul {
+        margin-top: 40px;
+    }
+}
+
+.patient-homepage-menu-toggle {
+    display: none;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out; 
+}
+
+.patient-homepage-menu-toggle span {
+    display:block;
+    width: 30px;
+    height: 5px;
+    background-color: #fff;
+    margin-bottom: 5px;
+    transition: all 0.3s ease-in-out;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px
+}
+
+.patient-homepage-menu {
+    display: flex;
+}
+
+.patient-homepage-menu-toggle.active {
+    transform: rotate(90deg);
+}
+
+@media screen and (max-width: 768px) {
+    .patient-homepage-menu {
+        display: none;
+    }
+
+    .patient-homepage-menu-toggle {
+        display: block;
+    }
+
+    .patient-homepage-header {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        flex-direction: row-reverse;
+    }
+
+    #patient-homepage-nav ul {
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 4em;
+        left: 8%; 
+        transform: translateX(-8%); 
+        width:max-content; 
+        max-width: 400px; 
+        border-radius: 8px;
+        padding-left: 5px;
+        padding-right: 10px;
+        background-color: #0b7dc8;
+        z-index: 1;
+        display: none;
+    }
+
+    #patient-homepage-nav ul.show {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    #patient-homepage-nav li {
+        margin: 4%;
+    }
+}
+
+#patient-homepage-footer {
+    background-color: #3498db;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    margin: 3px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.patient-homepage-faq {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#patient-homepage-h2 {
+    text-align: center;
+    color: #02568f;
+}
+
+.patient-homepage-accordion__item {
+    border-bottom: 0.1rem solid var(--dividerGray);
+}
+
+.patient-homepage-accordion__item h2 {
+    margin: 0;
+}
+
+.patient-homepage-accordion__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1.35rem 0.5rem;
+    border: none;
+    background: none;
+    font-family: "Kumbh Sans", sans-serif;
+    font-size: 1.1em;
+    text-align: left;
+    transition: all 300ms ease-in-out;
+}
+
+.patient-homepage-accordion__title:focus, .patient-homepage-accordion__title:focus-visible {
+    z-index: 3;
+    outline: solid #3498db;
+    box-shadow: 0 0 0.4rem 0.4rem rgba(31, 106, 219, 0.25);
+    border-radius: 0.3rem;
+}
+
+.patient-homepage-accordion__title:hover {
+    cursor: pointer;
+    color: var(--textBlue);
+}
+
+.patient-homepage-accordion__title::after {
+    content: "";
+    display: block;
+    width: 1rem;
+    height: 0.6rem;
+    background-image: url("https://raw.githubusercontent.com/MizAndhre/FAQ-accordion-card/2ff2a02d093554f14d0390a409e825669313a16e/images/icon-arrow-down.svg");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: brightness(1) invert(1);
+    transition: transform 300ms ease-in-out;
+}
+
+.patient-homepage-accordion__text {
+    text-align: left;
+    padding: 0.5rem 0.5rem .5rem 0.5rem;
+    line-height: 1.5;
+    color: var(--textDarkBlue);
+}
+
+.patient-homepage-accordion__title.open {
+    font-weight: 700;
+    color: var(--textBlue);
+}
+
+.patient-homepage-accordion__title.open::after {
+    transform: rotate(180deg);
+}
+
+.patient-homepage-accordion__collapse.collapse {
+    display: none;
+}
+
+.patient-homepage-accordion__collapse.collapsing {
+    height: 0;
+    overflow: hidden;
+    transition: height 1s ease;
+}
+
+.patient-homepage-accordion__collapse.open {
+    display: block;
+}
+
+#patient-homepage-contact {
+    background-color: #f4f4f4;
+    padding: 15px 15px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+#patient-homepage-contact h2 {
+    color:#02568f;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#patient-homepage-contact p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+#patient-homepage-contact p:last-child {
+    margin-bottom: 0;
+}
+
+#patient-homepage-contact p i {
+    margin-right: 5px;
+}
+
+#patient-homepage-contact-mail {
+    text-decoration: none;
+    color: #555;
+}
+
+#contact-mail:hover {
+    color: #0b7dc8;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap');
+
+#patient-homepage-DoctorDetails {
+    display: flex;
+    margin: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.patient-homepage-doctor-profile {
+    background-color: #f0f0f0;
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    align-items: center;
+}
+
+.patient-homepage-doctor-photo {
+    flex: 1;
+    text-align: center;
+}
+
+.patient-homepage-doctor-photo img {
+    width: 170px;
+    height: 170px;
+    border-radius: 10%;
+    margin-top: 30px;
+}
+
+.patient-homepage-doctor-info {
+    flex: 3;
+    padding: 12px 18px 18px 18px;
+    text-align: center;
+}
+
+.patient-homepage-doctor-info h2 {
+    margin-bottom: 10px;
+}
+
+.patient-homepage-doctor-info p {
+    color: #444;
+    margin: 5px 0;
+}
+
+.patient-homepage-btn-appointment,
+.patient-homepage-btn-chat {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 7px;
+    margin: 4px;
+    cursor: pointer;
+    width:150px ;
+    transition: background-color 0.3s ease;
+}
+
+.patient-homepage-btn-appointment:hover,
+.patient-homepage-btn-chat:hover {
+    background-color: #02568f;
+}
+
+#patient-homepage-quote {
+    font-size: 1.5rem;
+    font-family: monospace, "Kumbh Sans", 'Roboto';
+}
+#patient-homepage-quote-container {
+    margin: 15px;
+    padding: 5px;
+}
+.hidden {
+    display: none;
+}
+
+#searchDoctor {
+    padding: 8px 12px;
+    margin: 10px;
+    border: 1.5px solid #02568f;
+    border-radius: 7px;
+    font-size: 16px;
+    width: 250px;
+}
+
+#filterSpecialization {
+    padding: 8px 12px;
+    margin: 10px;
+    border: 1.5px solid #02568f;
+    border-radius: 7px;
+    font-size: 16px;
+    width: 250px;
+}
+
+#SerchandFilter {
+    margin: 20px;
+}
