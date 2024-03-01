@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import axios from 'axios';
 import {be_url} from "/config"
-import {useNavigate} from "react-router-dom";
+import {useNavigate , Link} from "react-router-dom";
 import "../CSS/PatientDashboard.css";
 import Chatbox from "./Chatbox.jsx";
+import NewChatBox from "./NewChatBox.jsx";
 import Typed from 'typed.js';
 
 function PatientDashboard() {
@@ -13,6 +14,9 @@ function PatientDashboard() {
     const lastVisitedPage = localStorage.getItem('lastVisitedPage');
     let [firstName , setFirstName] = useState("") ;
     let [lastName , setLastName] = useState("") ;
+    let [doctors , setDoctors] = useState("") ;
+    let [docName,setDocName] = useState("");
+    let [docEmailId,setDocEmailId] = useState("");
 
     useEffect(()=>{
         window.addEventListener('beforeunload', () => {
@@ -27,6 +31,7 @@ function PatientDashboard() {
                 if(res.data.code == 2 && res.data.role == "patient"){
 
                     console.log(res.data) ;
+                    setDoctors(res.data.doctorData) ;
 
                 }
 
@@ -157,7 +162,9 @@ function PatientDashboard() {
 
   return (
     <>
-        {displayChatbox ? <Chatbox displayChatbox={displayChatbox} setDisplayChatbox = {setDisplayChatbox}></Chatbox> : null}
+        {/* {displayChatbox ? <Chatbox displayChatbox={displayChatbox} setDisplayChatbox = {setDisplayChatbox}></Chatbox> : null} */}
+
+        {displayChatbox ? <NewChatBox displayChatbox={displayChatbox} setDisplayChatbox = {setDisplayChatbox} docName = {docName}></NewChatBox> : null}
 
       <header className="patient-homepage-header">
         <h1 id="patient-homepage-h1">Welcome , {firstName} {lastName}</h1>
@@ -168,12 +175,7 @@ function PatientDashboard() {
         </div>
         <nav id="patient-homepage-nav">
           <ul>
-          <button 
-        onClick={()=>{setDisplayChatbox(!displayChatbox)}}
-        >
-            chat
-        </button>
-            <li><a href="#Appoinmentpage">Book an Appointment</a></li>
+          
             <li><a href="#yourAppoinmentpage">Your Appointments</a></li>
             <li><a href="#patient-homepage-Doctor-details">Doctors</a></li>
             <li><a href="#patient-homepage-faq">FAQ'S</a></li>
@@ -203,86 +205,24 @@ function PatientDashboard() {
         <section id="patient-homepage-Doctor-details">
           <h2 id="patient-homepage-h2">Meet Our Doctors</h2>
           <div id="patient-homepage-DoctorDetails">
-            <div className="patient-homepage-doctor-profile">
-              <div className="patient-homepage-doctor-photo">
-                <img src="doc1.png" alt="Doctor Photo" />
-              </div>
-              <div className="patient-homepage-doctor-info">
-                <h2 id="patient-homepage-h2">Dr. Elala Hobi</h2>
-                <p className="dr-specialization">Neurosurgeon</p>
-                <p>Experience: 10 years</p>
-                <p>📍 Kalupur</p>
-                <button className="patient-homepage-btn-chat">Chat Privately</button>
-                <button className="patient-homepage-btn-appointment">Book an Appointment</button>
-              </div>
-            </div>
+            {doctors ? doctors.map((obj)=>{
 
-            <div className="patient-homepage-doctor-profile">
-              <div className="patient-homepage-doctor-photo">
-                <img src="doc2.png" alt="Doctor Photo" />
-              </div>
-              <div className="patient-homepage-doctor-info">
-                <h2 id="patient-homepage-h2">Dr. Rikiret Tiwari</h2>
-                <p className="dr-specialization">Physiotherapist</p>
-                <p>Experience: 2 years</p>
-                <p>📍 Chandkheda</p>
-                <button className="patient-homepage-btn-chat">Chat Privately</button>
-                <button className="patient-homepage-btn-appointment">Book an Appointment</button>
-              </div>
-            </div>
-            <div class="patient-homepage-doctor-profile">
-                    <div class="patient-homepage-doctor-photo">
-                        <img src="doc3.png" alt="Doctor Photo" />
-                    </div>
-                    <div class="patient-homepage-doctor-info">
-                        <h2 id="patient-homepage-h2" >Dr. Demo Dulaaa</h2>
-                        <p class="dr-specialization">Cardiologist</p>
-                        <p>Experience: 3 years</p>
-                        <p>📍 Shahibaugh</p>
-                        <button class="patient-homepage-btn-chat">Chat Privately</button>
-                        <button class="patient-homepage-btn-appointment">Book an Appointment</button>
-                    </div>
-                </div>
-                <div class="patient-homepage-doctor-profile">
-                    <div class="patient-homepage-doctor-photo">
-                        <img src="doc4.png" alt="Doctor Photo" />
-                    </div>
-                    <div class="patient-homepage-doctor-info">
-                        <h2 id="patient-homepage-h2" >Dr. Dada Patel</h2>
-                        <p class="dr-specialization">Gastroenterologist</p>
-                        <p>Experience: 37 years</p>
-                        <p>📍 Kanbha, Ahmedabad</p>
-                        <button class="patient-homepage-btn-chat">Chat Privately</button>
-                        <button class="patient-homepage-btn-appointment">Book an Appointment</button>
-                    </div>
-                </div>
-                <div class="patient-homepage-doctor-profile">
-                  <div class="patient-homepage-doctor-photo">
-                      <img src="doc5.png" alt="Doctor Photo" />
-                  </div>
-                  <div class="patient-homepage-doctor-info">
-                      <h2 id="patient-homepage-h2" >Dr. Vishal Sindhi</h2>
-                      <p class="dr-specialization">Gastroenterologist</p>
-                      <p>Experience: 37 years</p>
-                      <p>📍 Kanbha, Ahmedabad</p>
-                      <button class="patient-homepage-btn-chat">Chat Privately</button>
-                      <button class="patient-homepage-btn-appointment">Book an Appointment</button>
-                  </div>
-              </div>
-              <div class="patient-homepage-doctor-profile">
+                return(<div class="patient-homepage-doctor-profile">
                 <div class="patient-homepage-doctor-photo">
-                    <img src="doc6.png" alt="Doctor Photo"/>
+                    <img src={obj.profilePicURL} alt="Doctor Photo"/>
                 </div>
                 <div class="patient-homepage-doctor-info">
-                    <h2 id="patient-homepage-h2" >Dr.Om Omomom</h2>
-                    <p class="dr-specialization">Gastroenterologist</p>
-                    <p>Experience: 37 years</p>
-                    <p>📍 Kanbha, Ahmedabad</p>
-                    <button class="patient-homepage-btn-chat">Chat Privately</button>
-                    <button class="patient-homepage-btn-appointment">Book an Appointment</button>
+                    <h2 id="patient-homepage-h2" >Dr. {obj.name}</h2>
+                    <p class="dr-specialization">{obj.specialization}</p>
+                    <p>Experience: {obj.experience} years</p>
+                    <p>📍 {obj.city}, {obj.state}</p>
+                    <button class="patient-homepage-btn-chat" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) ; setDisplayChatbox(!displayChatbox)}}>Chat Privately</button>
+                    <button class="patient-homepage-btn-appointment" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}>Book an Appointment</button>
+
+                    <Link id="appointment-booking-link" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}class="patient-homepage-btn-appointment" to={{ pathname: "/appointment-booking", state: { docName , docEmailId } }}>Book an Appointment</Link>
                 </div>
-            </div>
-            {/* More doctor profiles */}
+            </div>)
+            }) : null}
           </div>
         </section>
         <hr/>

@@ -9,8 +9,8 @@ const mongoUri = process.env.MONGO_URI ;
 const port = 4000 ;
 
 const corsOptions = {
-    // origin : "http://localhost:5173",
-    origin : "https://hack-the-spring-med-tech.vercel.app",
+    origin : "http://localhost:5173",
+    // origin : "https://hack-the-spring-med-tech.vercel.app",
     credentials : true,
     optionSuccessStatus : 200 
 }
@@ -71,6 +71,7 @@ const PatientSchema = mongoose.Schema({
      birthdate : String ,
      age : Number ,
      gender : String,
+    profilePicURL : String ,
      occupation : String,
      previousMedicalHistory : String,
      previousMedicalHistoryImageURLs : [String],
@@ -95,6 +96,9 @@ const DoctorSchema = mongoose.Schema({
     gender : String,
     education : String,
     personalID : String,
+    specialization: String ,
+    experience : Number ,
+    profilePicURL : String ,
     waitingList : [{
         emailId : String ,
         date : String ,
@@ -216,7 +220,22 @@ async (req , res)=>{
 
     let user = await Users.findOne({emailId}) ; 
 
-    res.json({code : 2 , message : "valid user" , role : user.role});
+    let doctors = await Doctors.find({}) ;
+
+    console.log(doctors) ;
+
+    let doctorData = await Promise.all(doctors.map(async (obj)=>{
+
+        let {emailId , experience , specialization, city , state , profilePicURL} = obj ;
+
+        let Duser = await Users.findOne({emailId : obj.emailId}) ;
+
+        let { firstName, lastName } = Duser;
+
+        return {name : [firstName, lastName].join(" ") , emailId , experience , specialization, city , state , profilePicURL} ;        
+    }));
+
+    res.json({code : 2 , message : "valid user" , role : user.role , doctorData});
 })
 
 app.get("/doctor-dashboard" ,
@@ -327,9 +346,18 @@ app.get("/submit-availibility", AuthenticateToken, async (req, res) => {
     res.json({ code: 2, message: "valid user", role: user.role });
 });
 
-
-
 app.get("/submit-availibility" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.get("/appointment-booking" ,
  AuthenticateToken ,
 async (req , res)=>{
 
@@ -372,15 +400,18 @@ app.post("/submit-doctor-details" , AuthenticateToken ,async (req , res)=>{
     user.save() ;
 
     let data = req.body ;
-    console.log("data >>> " ,data) ;
+    // console.log("data >>> " ,data) ;
 
     let DoctorData = {emailId ,...data } ;
+    console.log(DoctorData) ;
 
     console.log("doctor data >>> " , DoctorData) ;
     Doctors.create(DoctorData) ;
 
     res.json({code : 2 , message : "data saved successfully"});
 })
+
+
 
 // app.get("/select-patient" , AuthenticateToken, async (req , res)=>{
 

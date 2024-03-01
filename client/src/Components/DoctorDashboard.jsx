@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React , {useEffect, useState } from "react";
 import axios from 'axios';
 import { be_url } from "/config"; 
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,13 @@ function DoctorDashBoard() {
     let [firstName , setFirstName] = useState("") ;
     let [lastName , setLastName] = useState("") ;
 
+    useEffect(()=>{
+        let user = JSON.parse(window.localStorage.getItem("user")) ;
+
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+    } , []) 
+     
     const lastVisitedPage = localStorage.getItem('lastVisitedPage');
 
     useEffect(()=>{
@@ -21,12 +28,6 @@ function DoctorDashBoard() {
         });
       })
 
-    useEffect(()=>{
-        let user = JSON.parse(window.localStorage.getItem("user")) ;
-
-        setFirstName(user.firstName);
-        setLastName(user.lastName);
-    } , [])  
 
     useEffect(()=>{
 

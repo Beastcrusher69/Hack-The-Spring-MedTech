@@ -1,0 +1,57 @@
+#AppoinBooking-body {
+    font-family: Arial, sans-serif;
+    /* background-color: #f4f4f4; */
+    margin: 0;
+    padding: 0;
+  }
+  
+  #AppoinBooking-h1 {
+    text-align: center;
+    margin: 12px;
+    color: #02568f;
+  }
+  
+  #AppoinBooking-appointmentForm {
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(8, 1, 86, 0.25);
+  }
+  
+  #AppoinBooking-appointmentForm label {
+    display: inline-block;
+    color: #02568f;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  #AppoinBooking-appointmentForm input,
+  #AppoinBooking-appointmentForm select,
+  #AppoinBooking-appointmentForm textarea {
+    width: calc(100% - 1px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border-width: 1.5px;
+    font-size: medium;
+  }
+  
+  #AppoinBooking-appointmentForm input[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    font-size: large;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  #AppoinBooking-appointmentForm input[type="submit"]:hover {
+    background-color: #02568f;
+  }
+  

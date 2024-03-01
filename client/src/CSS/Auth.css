@@ -74,16 +74,20 @@
 
   #username-wrap{
     display:flex;
-    /* justify-content: space-between; */
+    justify-content: space-between;
   }
 
-  /* #username-wrap input{
-    width:100%;
+  #first-name {
+    width:95%;
+  }
+
+  #last-name{
+    width : 100% ;
   }
 
   #username-wrap label{
-    width:45%;
-  } */
+    width:50%;
+  }
 
   .auth-form label{
     font-size:15px;
@@ -148,4 +152,11 @@
     position:relative;
     top:2px;
     margin-right:2px;
+  }
+
+  @media (max-width : 450px){
+    .auth-form {
+      width : 90% ;
+      margin : 20px ;
+    } 
   }

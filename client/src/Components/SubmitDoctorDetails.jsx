@@ -15,6 +15,9 @@ function SubmitDoctorDetails(){
     let [gender , setGender] = useState("");
     let [education, setEducation] = useState("");
     let [personalID, setPersonalID] = useState("");
+    let [specialization, setSpecialization] = useState("");
+    let [experience, setExperience] = useState("");
+    let [profilePic, setProfilePic] = useState("");
     let [isFilled , setIsFilled] = useState(true) ;
     const lastVisitedPage = localStorage.getItem('lastVisitedPage');
 
@@ -74,13 +77,35 @@ function SubmitDoctorDetails(){
 
     }
 
-    function handleSubmit(e){
+    function uploadimage(){
+
+        let image = new FormData();
+        console.log("pp[0]" , profilePic[0])
+        image.append('file', profilePic[0]);
+        image.append('upload_preset','expense-tracker')
+        image.append('cloud_name','dgqba5trl')
+
+        return axios.post("https://api.cloudinary.com/v1_1/dgqba5trl/image/upload",image)
+    }
+
+    async function handleSubmit(e){
 
         e.preventDefault() ;
 
-        if(address !== "" && city !== "" && state !== "" && birthdate !== "" && gender !== "" && education !== "" && personalID !== ""){ // change
+        if(address !== "" && city !== "" && state !== "" && birthdate !== "" && gender !== "" && education !== "" && personalID !== "" && specialization !== "" && profilePic !== "" && experience !== ""){ // change
 
-            axios.post(be_url + "/submit-doctor-details" , { address , city , state , birthdate , age , gender , education , personalID} , {withCredentials : true})
+            let profilePicURL ;
+
+            await uploadimage()
+            .then((res)=>{
+                console.log(res.data.url) ;
+                profilePicURL = res.data.url ;
+            })
+            .catch((err)=>{
+                console.error(err) ;
+            })
+
+            axios.post(be_url + "/submit-doctor-details" , { address , city , state , birthdate , age , gender , education , personalID , specialization , experience , profilePicURL} , {withCredentials : true})
             .then((res)=>{
 
                 console.log("res.data" , res.data) ;
@@ -104,7 +129,11 @@ function SubmitDoctorDetails(){
         console.log("age : " , age , typeof(age));
         console.log("gender : " , gender , typeof(gender));
         console.log("education : " , education , typeof(education));
+        console.log("specializaion : " , specialization , typeof(specialization));
+        console.log("experience : " , experience , typeof(experience));
         console.log("personalID : " , personalID , typeof(personalID));
+        console.log("url : " , profilePic , typeof(profilePic));
+
 
 
     }
@@ -180,11 +209,27 @@ function SubmitDoctorDetails(){
             <option value="other">Transgender</option>
         </select><br/>
 
-        <label htmlFor="occupation">Education:</label>
+        <label htmlFor="education">Education:</label>
         <input type="text" id="education" name="education"  onChange={(e)=>{setEducation(e.target.value)}}/><br/>
-        <label htmlFor="occupation">Personal ID:</label>
+
+        <label htmlFor="specialization">Specialization:</label>
+
+        <select id="specialization" onChange={(e)=>{setSpecialization(e.target.value)}}>
+            <option value="">choose specialization</option>
+            <option value="Neurosurgeon">Neurosurgeon</option>
+            <option value="Physiotherapist">Physiotherapist</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Gastroenterologist">Gastroenterologist</option>
+          </select>
+
+        <label htmlFor="experience">Experience:</label>
+        <input type="text" id="experience" name="experience"  onChange={(e)=>{setExperience(e.target.value)}}/><br/>
+        
+        <label htmlFor="personalID">Personal ID:</label>
         <input type="text" id="personalID" name="personalID" required=""  onChange={(e)=>{setPersonalID(e.target.value)}}/><br/>
     
+        <label htmlFor="profilePicInput">Profile Pic:</label>
+        <input type="file" id="profilePicInput" name="profilePicInput"  onChange={(e)=>{setProfilePic(e.target.files)}}/><br/>
         <input type="submit" value="Submit" onClick={handleSubmit}/>
     </form>
 

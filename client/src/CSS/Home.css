@@ -13,10 +13,14 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.homepage-container *{
+    padding-bottom : 16px ;
+}
+
 .homepage-header {
     background-color: #3498db;
     color: #fff;
-    padding: 10px 20px;
+    padding: 20px 20px;
     margin: 3px;
     display: flex;
     justify-content: space-between;
@@ -385,3 +389,9 @@
     font-size: 1.5rem;
     font-family: monospace, "Kumbh Sans", 'Roboto';
 }
+
+#homepage-quote-container {
+    margin : 15px  ;
+}
+
+
