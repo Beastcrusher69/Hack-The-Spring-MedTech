@@ -26,27 +26,73 @@ function Home() {
 
     let navigate = useNavigate() ;
     
-    useEffect(() => {
-        const handleAccordionClick = () => {
-            const accordionBtns = document.querySelectorAll(".homepage-accordion__title");
+    // useEffect(() => {
+    //     const handleAccordionClick = () => {
+    //         const accordionBtns = document.querySelectorAll(".homepage-accordion__title");
 
+    //         accordionBtns.forEach((button) => {
+    //             button.addEventListener("click", () => {
+    //                 const accCollapse = button.nextElementSibling;
+
+    //                 if (!button.classList.contains("collapsing")) {
+    //                     // open accordion item
+    //                     if (!button.classList.contains("open")) {
+    //                         accCollapse.style.display = "block";
+    //                         const accHeight = accCollapse.clientHeight;
+
+    //                         setTimeout(() => {
+    //                             accCollapse.style.height = accHeight + "px";
+    //                             accCollapse.style.display = "";
+    //                         }, 1);
+
+    //                         accCollapse.classList = "homepage-accordion__collapse collapsing";
+
+    //                         setTimeout(() => {
+    //                             accCollapse.classList = "homepage-accordion__collapse collapse open";
+    //                         }, 300);
+    //                     }
+    //                     // close accordion item
+    //                     else {
+    //                         accCollapse.classList = "homepage-accordion__collapse collapsing";
+
+    //                         setTimeout(() => {
+    //                             accCollapse.style.height = "0px";
+    //                         }, 1);
+
+    //                         setTimeout(() => {
+    //                             accCollapse.classList = "homepage-accordion__collapse collapse";
+    //                             accCollapse.style.height = "";
+    //                         }, 300);
+    //                     }
+
+    //                     button.classList.toggle("open");
+    //                 }
+    //             });
+    //         });
+    //     };
+
+        // handleAccordionClick();
+
+        useEffect(() => {
+            const accordionBtns = document.querySelectorAll(".homepage-accordion__title");
+    
             accordionBtns.forEach((button) => {
                 button.addEventListener("click", () => {
                     const accCollapse = button.nextElementSibling;
-
+    
                     if (!button.classList.contains("collapsing")) {
                         // open accordion item
                         if (!button.classList.contains("open")) {
                             accCollapse.style.display = "block";
                             const accHeight = accCollapse.clientHeight;
-
+    
                             setTimeout(() => {
                                 accCollapse.style.height = accHeight + "px";
                                 accCollapse.style.display = "";
                             }, 1);
-
+    
                             accCollapse.classList = "homepage-accordion__collapse collapsing";
-
+    
                             setTimeout(() => {
                                 accCollapse.classList = "homepage-accordion__collapse collapse open";
                             }, 300);
@@ -54,40 +100,49 @@ function Home() {
                         // close accordion item
                         else {
                             accCollapse.classList = "homepage-accordion__collapse collapsing";
-
+    
                             setTimeout(() => {
                                 accCollapse.style.height = "0px";
                             }, 1);
-
+    
                             setTimeout(() => {
                                 accCollapse.classList = "homepage-accordion__collapse collapse";
                                 accCollapse.style.height = "";
                             }, 300);
                         }
-
+    
                         button.classList.toggle("open");
                     }
                 });
             });
-        };
+    
+            return () => {
+                accordionBtns.forEach((button) => {
+                    button.removeEventListener("click", () => {});
+                });
+            };
+        }, []);
+    
+        useEffect(()=>{
+            const menuToggle = document.querySelector('.homepage-menu-toggle');
+            const navList = document.querySelector('#homepage-nav ul');
 
-        handleAccordionClick();
-
-        const menuToggle = document.querySelector('.homepage-menu-toggle');
-        const navList = document.querySelector('#homepage-nav ul');
-
-        menuToggle.addEventListener('click', function() {
-            navList.classList.toggle('show');
-            menuToggle.classList.toggle('active');
-        });
-
-    }, []);
+            menuToggle.addEventListener('click', function() {
+                navList.classList.toggle('show');
+                menuToggle.classList.toggle('active');
+            });
+        },[])
     
     return (
         <div className="homepage-body">
             <header className="homepage-header">
 
-        <h1 id="homepage-h1">MEDTECH</h1>
+        {/* <h1 id="homepage-h1"></h1> */}
+
+        <div id="logo-div">
+            <img src="./public/logo.jpg"></img>
+        </div>
+
         <div className="homepage-menu-toggle" >
             <span></span>
             <span></span>

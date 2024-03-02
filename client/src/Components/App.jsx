@@ -11,6 +11,7 @@ import RecentAppointments from "./RecentAppointments.jsx"
 import WaitingList from "./WaitingList.jsx"
 import SubmitAvailibility from "./SubmitAvailibility.jsx"
 import AppointmentBooking from "./AppointmentBooking.jsx";
+import YourAppointments from "./YourAppointments.jsx";
 
 function App(){
 
@@ -29,6 +30,7 @@ function App(){
                 <Route exact path="/waiting-list" element={<WaitingList/>}></Route>
                 <Route exact path="/submit-availibility" element={<SubmitAvailibility/>}></Route>
                 <Route exact path="/appointment-booking" element={<AppointmentBooking/>}></Route>
+                <Route exact path="/your-appointments" element={<YourAppointments/>}></Route>
 
             </Routes>
         </Router>

@@ -64,7 +64,11 @@ function Login() {
 
             <form className="auth-form">
 
-                <h2 className='projectname auth-projectname' >projectname</h2>
+                <h2 className='ConsultMe auth-ConsultMe' >ConsultMe</h2>
+
+                {/* <div className="logo-div-auth">
+                <img src="./public/logo.png"></img>
+                </div> */}
 
                 <p className='error-box' style={{ display : (message == "") ? "none" : "block"}}>
                     <span className='error-icon-span'><AiOutlineExclamationCircle/></span>

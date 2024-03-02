@@ -1,0 +1,93 @@
+.your-app-container {
+    width: 98%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    padding: 10px;
+  }
+  
+  #your-app-herotext {
+    text-align: center;
+    color: #02568f;
+  }
+  
+  #your-app-appointmentsTable{
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 12, 125, 0.25);
+  }
+  
+  #your-app-appointmentsTable th, td {
+    padding: 8px;
+    text-align:left;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  #your-app-appointmentsTable th {
+    background-color: #f2f2f2;
+    color: #02568f;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  #your-app-appointmentsTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f2f2f2;
+  }
+  
+  #your-app-appointmentsTable tbody th,
+  #your-app-appointmentsTable tbody td {
+    position: relative;
+    z-index: 0;
+  }
+  
+  #your-app-appointmentsTable tr:hover {
+    background-color: #f4f4f4;
+  }
+  
+  #your-app-searchInput {
+    margin-left: 10px;
+  }
+  
+  .your-app-controls {
+    margin: 10px;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+  }
+  
+  .your-app-controls button, .your-app-filter select,
+  #your-app-searchInput {
+    margin-left: 10px;
+    color:#02568f;
+    background: none;
+    font-size: medium;
+    border-color:#3498db;
+    border-radius: 5px;
+    border-width: 1.5px;
+  }
+  
+  .your-app-sort, .your-app-filter {
+    display: flex;
+    align-items: center;
+  }
+  .your-app-filter{
+    margin-left: 20px;
+  }
+  
+  .your-app-sort button, .your-app-filter select {
+    margin-left: 10px;
+  }
+  
+  #your-app-searchbar {
+    margin: 10px;
+  }
+  
+  .your-app-accept-button,
+  .your-app-reject-button {
+    margin-right: 5px;
+    border-color: #3498db;
+    border-radius: 4px;
+  }

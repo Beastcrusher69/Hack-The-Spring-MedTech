@@ -30,7 +30,6 @@ function PatientDashboard() {
              .then((res)=>{
                 if(res.data.code == 2 && res.data.role == "patient"){
 
-                    console.log(res.data) ;
                     setDoctors(res.data.doctorData) ;
 
                 }
@@ -55,6 +54,8 @@ function PatientDashboard() {
 
         setFirstName(user.firstName);
         setLastName(user.lastName);
+
+
     } , []) 
 
     useEffect(() => {
@@ -160,6 +161,25 @@ function PatientDashboard() {
 
     }, []);
 
+    // useEffect(()=>{
+
+    //     if(docName !== "" && docEmailId !== ""){
+    //         handleBookAppointment() ;
+    //     }
+    // } , [docName , docEmailId]) ;
+
+    function handleBookAppointment(obj) {
+        
+        // Create a doctor object with docName and docEmailId
+        // Store the doctor object in local storage
+
+        window.localStorage.setItem("doctor", JSON.stringify({docName : obj.name, docEmailId : obj.emailId}));
+      
+        // Navigate to the "/appointment-booking" route
+        navigate("/appointment-booking");
+      }
+      
+
   return (
     <>
         {/* {displayChatbox ? <Chatbox displayChatbox={displayChatbox} setDisplayChatbox = {setDisplayChatbox}></Chatbox> : null} */}
@@ -176,8 +196,8 @@ function PatientDashboard() {
         <nav id="patient-homepage-nav">
           <ul>
           
-            <li><a href="#yourAppoinmentpage">Your Appointments</a></li>
-            <li><a href="#patient-homepage-Doctor-details">Doctors</a></li>
+            <li><a href="" onClick={()=>{navigate("/your-appointments")}}>Your Appointments</a></li>
+            {/* <li><a href="#patient-homepage-Doctor-details">Doctors</a></li> */}
             <li><a href="#patient-homepage-faq">FAQ'S</a></li>
             <li><a href="#patient-homepage-contact">Contact</a></li>
             <li><a href="#profilepage">Profile</a></li>
@@ -195,10 +215,28 @@ function PatientDashboard() {
           <input type="text" id="searchDoctor" placeholder="Search by Doctor's Name" />
           <select id="filterSpecialization">
             <option value="">Filter by specialization</option>
-            <option value="Neurosurgeon">Neurosurgeon</option>
-            <option value="Physiotherapist">Physiotherapist</option>
-            <option value="Cardiologist">Cardiologist</option>
-            <option value="Gastroenterologist">Gastroenterologist</option>
+            <option value="">Select Specialization</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="Endocrinology">Endocrinology</option>
+            <option value="Gastroenterology">Gastroenterology</option>
+            <option value="Hematology">Hematology</option>
+            <option value="Nephrology">Nephrology</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Oncology">Oncology</option>
+            <option value="Ophthalmology">Ophthalmology</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Otolaryngology">Otolaryngology (ENT)</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Psychiatry">Psychiatry</option>
+            <option value="Pulmonology">Pulmonology</option>
+            <option value="Rheumatology">Rheumatology</option>
+            <option value="Urology">Urology</option>
+            <option value="Obstetrics and Gynecology">Obstetrics and Gynecology (OB/GYN)</option>
+            <option value="Anesthesiology">Anesthesiology</option>
+            <option value="Dentistry">Dentistry</option>
+            <option value="Radiology">Radiology</option>
+
           </select>
         </div>
 
@@ -217,9 +255,12 @@ function PatientDashboard() {
                     <p>Experience: {obj.experience} years</p>
                     <p>📍 {obj.city}, {obj.state}</p>
                     <button class="patient-homepage-btn-chat" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) ; setDisplayChatbox(!displayChatbox)}}>Chat Privately</button>
-                    <button class="patient-homepage-btn-appointment" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}>Book an Appointment</button>
 
-                    <Link id="appointment-booking-link" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}class="patient-homepage-btn-appointment" to={{ pathname: "/appointment-booking", state: { docName , docEmailId } }}>Book an Appointment</Link>
+
+                    <button class="patient-homepage-btn-appointment" onClick={()=>{ handleBookAppointment(obj) ;}}>Book an Appointment</button>
+
+
+                    {/* <Link id="appointment-booking-link" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}class="patient-homepage-btn-appointment" to={{ pathname: "/appointment-booking", state: { docName , docEmailId } }}>Book an Appointment</Link> */}
                 </div>
             </div>)
             }) : null}

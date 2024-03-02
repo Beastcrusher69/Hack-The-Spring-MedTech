@@ -58,7 +58,7 @@ function ChooseRole(){
             <div id="choose-role-wrap">
 
                 <h1>Welcome , {user.firstName} {user.lastName}  </h1>
-                <h2>How do you want to use projectname?</h2>
+                <h2>How do you want to use ConsultMe?</h2>
 
                 <div id="choose-role-option-wrap">
 

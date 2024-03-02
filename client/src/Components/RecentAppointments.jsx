@@ -41,13 +41,21 @@ function RecentAppointments() {
     useEffect(() => {
         // useEffect(()=>{
 
+            setFilteredAppointments(originalAppointments) ;
+    
+        // } , [])
+    }, [originalAppointments]);
+
+    useEffect(() => {
+        // useEffect(()=>{
+
             const urlParams = new URLSearchParams(window.location.search);
             const filter = urlParams.get('filter');
             
             filterAppointments(filter) ;
     
         // } , [])
-    }, [originalAppointments]); // Update filteredAppointments when originalAppointments change
+    }, []); // Update filteredAppointments when originalAppointments change
 
     const filterAppointments = (status) => {
         setFilterByStatus(status);
@@ -63,7 +71,7 @@ function RecentAppointments() {
         const searchInput = e.target.value.trim().toLowerCase();
         const filteredAppointments = originalAppointments.filter(appointment => {
             const patientName = appointment.patientName.toLowerCase();
-            return patientName.includes(searchInput) && (filterByStatus === 'all' || appointment.status === filterByStatus);
+            return patientName.includes(searchInput) && (filterByStatus === 'all' || appointment.status === filterByStatus.toLowerCase());
         });
         setFilteredAppointments(filteredAppointments);
     };

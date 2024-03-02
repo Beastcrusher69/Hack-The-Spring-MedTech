@@ -3,6 +3,7 @@ import axios from 'axios';
 import { be_url } from "/config"; 
 import { useNavigate } from "react-router-dom";
 import "../CSS/DoctorDashboard.css";
+import GPT from "./GPT.jsx"
 
 function DoctorDashBoard() {
     let navigate = useNavigate();
@@ -12,6 +13,7 @@ function DoctorDashBoard() {
     let [cancelledAppointmentsCount , setCancelledAppointmentsCount] = useState("") ;
     let [firstName , setFirstName] = useState("") ;
     let [lastName , setLastName] = useState("") ;
+    let [displayChatbox , setDisplayChatbox] = useState(false) ;
 
     useEffect(()=>{
         let user = JSON.parse(window.localStorage.getItem("user")) ;
@@ -75,6 +77,8 @@ function DoctorDashBoard() {
 
     return (
         <div>
+
+{displayChatbox ? <GPT displayChatbox={displayChatbox} setDisplayChatbox = {setDisplayChatbox}></GPT> : null}
             <header id="doctor-dashboard-header">
                 <div className="doctor-dashboard-welcome">Welcome, {firstName} {lastName}</div>
                 <nav id="doctor-dashboard-nav">
@@ -159,6 +163,15 @@ function DoctorDashBoard() {
                     onClick={()=>{navigate("/submit-availibility")}}
                     >Submit Your Availability</button>
 
+                    </section>
+
+
+                    <section className="doctor-dashboard-section">
+                        <h2>GPT-analysis</h2>
+                        <button 
+                        // href="waitingList.html"
+                        onClick={()=>{setDisplayChatbox(!displayChatbox) }}
+                        >Chat with ConsultGPT!</button>
                     </section>
                 </div>
             </main>

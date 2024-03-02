@@ -7,9 +7,14 @@ const cors = require('cors') ;
 const mongoose = require('mongoose') ;
 const mongoUri = process.env.MONGO_URI ;
 const port = 4000 ;
+const OpenAI = require("openai");
+
+const openai = new OpenAI({
+    apiKey: "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" 
+});
 
 const corsOptions = {
-    // origin : "http://localhost:5173",
+    // origin : "http://localhost:5174",
     origin : "https://hack-the-spring-med-tech.vercel.app",
     credentials : true,
     optionSuccessStatus : 200 
@@ -19,6 +24,13 @@ app.use(express.urlencoded({extended : true}));
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
+
+function generateAppointmentId() {
+    const prefix = "APPT-";
+    const suffix = Math.floor(Math.random() * 100000); // Generate a random 5-digit number
+    const date = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // Get the current date in YYYYMMDD format
+    return `${prefix}${suffix}-${date}`;
+}
 
 function AuthenticateToken(req,res,next){
 
@@ -75,13 +87,15 @@ const PatientSchema = mongoose.Schema({
      occupation : String,
      previousMedicalHistory : String,
      previousMedicalHistoryImageURLs : [String],
-     myAppoinments : [
+     myAppointments : [
         {
             emailId : String,
             date : String ,
             time : String,
             reason : String ,
-            status : String
+            description: String,
+            status : String,
+            aid : String
         }
      ] 
     })
@@ -104,13 +118,17 @@ const DoctorSchema = mongoose.Schema({
         date : String ,
         time : String ,
         reason : String,
+        aid : String
+
     }] ,
     appointments : [{
         emailId : String ,
         date : String ,
         time : String ,
         reason : String,
-        status : String
+        status : String,
+        aid : String
+
     }]
    })
 
@@ -125,6 +143,23 @@ app.get("/home" , (req , res)=>{
         "user3" : "wefw efwew" 
     })
 }) 
+
+app.post('/getResponse', async (req, res) => {
+    const userMessage = req.body.message;
+    try {
+        const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [{ "role": "user", "content": userMessage }],
+            max_tokens: 200
+        });
+        console.log(userMessage);
+        console.log(response.choices[0].message.content);
+        res.json({ response: response.choices[0].message.content });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server' });
+    }
+});
 
 app.post("/signup" , async (req , res)=>{
 
@@ -254,7 +289,7 @@ async (req , res)=>{
     // console.log(appointments) ;
 
     let cancelledAppointmentsCount = appointments.filter((obj)=>{
-        return obj.status === "cancelled" ;
+        return obj.status === "rejected" ;
     }).length ;
     let scheduledAppointmentsCount = appointments.filter((obj)=>{
         return obj.status === "scheduled" ;
@@ -305,7 +340,7 @@ app.get("/waiting-list", AuthenticateToken, async (req, res) => {
     // Use Promise.all to wait for all asynchronous operations to complete
     let appointments = await Promise.all(waitingList.map(async (obj) => {
         let newObj;
-        let { date, time, reason } = obj;
+        let { date, time, reason ,aid} = obj;
         let Puser = await Users.findOne({ emailId: obj.emailId });
         let { firstName, lastName } = Puser;
 
@@ -330,7 +365,8 @@ app.get("/waiting-list", AuthenticateToken, async (req, res) => {
             gender,
             date,
             time,
-            reason
+            reason,
+            aid
         };
 
         return newObj; // Return the appointment object
@@ -366,6 +402,45 @@ async (req , res)=>{
     let user = await Users.findOne({emailId}) ; 
 
     res.json({code : 2 , message : "valid user" , role : user.role});
+})
+
+app.post("/appointment-booking" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let patEmailId = req.payload.emailId ; // patient
+
+    console.log("1>" ,patEmailId);
+
+    let {date , time , reason , description , docEmailId} = req.body ;
+
+    console.log("2>",{date , time , reason , description , docEmailId}) ;
+
+    let patient = await Patients.findOne({emailId :patEmailId}) ;
+    let doctor = await Doctors.findOne({emailId : docEmailId}) ;
+
+    let aid = generateAppointmentId() ;
+    console.log(aid) ;
+
+    patient.myAppointments.push({ emailId : docEmailId , date , time , reason , description , aid ,status : "pending" }) ;
+
+    patient.save();
+
+    doctor.waitingList.push({emailId : patEmailId , date , time , aid ,reason}) ;
+
+    doctor.save() ;
+
+    /*
+emailId : String ,
+        date : String ,
+        time : String ,
+        reason : String,
+    */
+
+
+    // let Puser = await Users.findOne({emailId}) ; 
+
+    res.json({code : 2 , message : "appointment request sent" });
 })
 
 app.post("/submit-medical-history" , AuthenticateToken ,async (req , res)=>{
@@ -411,6 +486,141 @@ app.post("/submit-doctor-details" , AuthenticateToken ,async (req , res)=>{
     res.json({code : 2 , message : "data saved successfully"});
 })
 
+
+app.get("/your-appointments" , AuthenticateToken ,async (req , res)=>{
+
+    let emailId = req.payload.emailId ;
+
+    let user = await Users.findOne({emailId});
+
+    let patient = await Patients.findOne({emailId});
+
+    let myAppointments = patient.myAppointments ;
+
+    // console.log("myAppointments>>> " , myAppointments) ;
+
+    let yourAppointments = await Promise.all(myAppointments.map(async (obj) => {
+        let Duser = await Users.findOne({ emailId: obj.emailId });
+        let { firstName, lastName } = Duser;
+
+        let {time , date , reason , status ,aid } = obj ;
+
+        let newObj = {fullName : [firstName ,lastName].join(" ") , time , date , reason , status ,aid  } ;
+        console.log(newObj) ;
+
+        return newObj; 
+    }));
+
+    res.json({code : 2 , message : "user is valid" , role : user.role , yourAppointments });
+})
+
+app.post("/accepted-appointment" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let docEmailId = req.payload.emailId ;
+    let keyAid = req.body.key ;
+
+    let  doctor = await Doctors.findOne({emailId : docEmailId}) ; 
+
+    let myObjArr = doctor.waitingList.filter((obj)=>{
+        return obj.aid == keyAid;
+    })
+
+    console.log("1>>" , myObjArr) ;
+    let myObj = myObjArr[0] ;
+    let {emailId,date,time ,reason , aid} = myObj ;
+
+    let patient =  await Patients.findOne({emailId}) ;
+
+    let newMyAppointments = patient.myAppointments.map((obj)=>{
+
+        if(obj.aid == keyAid){
+            obj.status = "accepted" ;
+        }
+
+        return obj ;
+    }) ;
+
+    console.log("newMyAppointments" , newMyAppointments) ;
+
+    patient.myAppointments = newMyAppointments ;
+
+    patient.save() ;
+
+    let newWaitingList = doctor.waitingList.filter((obj)=>{
+        return obj.aid != keyAid ;
+    })
+
+    console.log("2>>" , newWaitingList) ;
+
+    doctor.waitingList = newWaitingList ;
+
+    doctor.appointments.push({emailId,date,time ,reason , aid, status : "scheduled"}) ;
+
+    console.log("app>>" , doctor.appointments) ;
+
+    doctor.save() ;
+
+    console.log("3>>" , doctor.appointments) ;
+
+
+    res.json({code : 2 , message : "valid user" });
+})
+
+app.post("/rejected-appointment" ,
+ AuthenticateToken ,
+async (req , res)=>{
+
+    let docEmailId = req.payload.emailId ;
+    let keyAid = req.body.key ;
+
+    let  doctor = await Doctors.findOne({emailId : docEmailId}) ; 
+
+    let myObjArr = doctor.waitingList.filter((obj)=>{
+        return obj.aid == keyAid;
+    })
+
+    console.log("1>>" , myObjArr) ;
+    let myObj = myObjArr[0] ;
+    let {emailId,date,time ,reason , aid} = myObj ;
+
+    let patient =  await Patients.findOne({emailId}) ;
+
+    let newMyAppointments = patient.myAppointments.map((obj)=>{
+
+        if(obj.aid == keyAid){
+            obj.status = "cancelled" ;
+        }
+
+        return obj ;
+    }) ;
+
+    console.log("newMyAppointments" , newMyAppointments) ;
+
+    patient.myAppointments = newMyAppointments ;
+
+    patient.save() ;
+
+    let newWaitingList = doctor.waitingList.filter((obj)=>{
+        return obj.aid != keyAid ;
+    })
+
+    console.log("2>>" , newWaitingList) ;
+
+    doctor.waitingList = newWaitingList ;
+
+    doctor.appointments.push({emailId,date,time ,reason , aid, status : "rejected"}) ;
+
+    console.log("app>>" , doctor.appointments) ;
+
+    doctor.save() ;
+
+    console.log("3>>" , doctor.appointments) ;
+
+
+    res.json({code : 2 , message : "valid user" });
+})
 
 
 // app.get("/select-patient" , AuthenticateToken, async (req , res)=>{

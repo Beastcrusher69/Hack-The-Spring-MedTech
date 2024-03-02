@@ -1,4 +1,4 @@
-.projectname{
+.ConsultMe{
   font-family: 'Lobster Two', sans-serif;
   color: #02568f;
   margin-top: 15px;
@@ -54,9 +54,13 @@
     align-self: center;
   }
 
-  .auth-projectname{
+  .auth-ConsultMe{
     font-size: 48px;
     text-align: center ;
+    font-family: "Roboto Condensed", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
   }
 
   .auth-form > *:not(label){
@@ -160,3 +164,5 @@
       margin : 20px ;
     } 
   }
+
+  
