@@ -140,7 +140,7 @@ function Home() {
         {/* <h1 id="homepage-h1"></h1> */}
 
         <div id="logo-div">
-            <img src="./public/logo.jpg"></img>
+            <img src="./public/logo-new.png"></img>
         </div>
 
         <div className="homepage-menu-toggle" >

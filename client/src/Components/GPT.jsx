@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import '../CSS/GPT.css'; //Change this css file Name
+import '../CSS/GPT.css'; 
 import {IoClose} from "react-icons/io5"
 
 
@@ -20,9 +20,17 @@ function GPT({displayChatbox , setDisplayChatbox}) {
                 body: JSON.stringify({ message: message })
             });
             const data = await response.json();
-            appendMessage(docName, data.response);
+            console.log("data:" ,data) ;
+
+            if(data.code == 1){
+                appendMessage(docName, 'Apologies, something went wrong. Please try again.');
+                console.log("Gemini Error: " , data.err)
+            }
+            else{
+                appendMessage(docName, data.response);
+            }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Internal Server Error:', error);
             appendMessage(docName, 'Apologies, something went wrong. Please try again.');
         }
     }

@@ -183,7 +183,7 @@
 }
 
 .patient-homepage-accordion__item h2 {
-    margin: 0;
+    margin: 0px;
 }
 
 .patient-homepage-accordion__title {
@@ -202,7 +202,7 @@
 
 .patient-homepage-accordion__title:focus, .patient-homepage-accordion__title:focus-visible {
     z-index: 3;
-    outline: solid #3498db;
+    /* outline: solid #3498db; */
     box-shadow: 0 0 0.4rem 0.4rem rgba(31, 106, 219, 0.25);
     border-radius: 0.3rem;
 }

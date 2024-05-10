@@ -6,19 +6,17 @@ const app = express() ;
 const cors = require('cors') ;
 const mongoose = require('mongoose') ;
 const mongoUri = process.env.MONGO_URI ;
+const geminiApiKey = process.env.GEMINI_API_KEY ;
 const port = 4000 ;
-const OpenAI = require("openai");
-
-const openai = new OpenAI({
-    apiKey: "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" 
-});
-
 const corsOptions = {
-    // origin : "http://localhost:5174",
-    origin : "https://hack-the-spring-med-tech.vercel.app",
+    origin : "http://localhost:5173",
+    // origin : "https://hack-the-spring-med-tech.vercel.app",
     credentials : true,
     optionSuccessStatus : 200 
 }
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(geminiApiKey);
+const AImodel = genAI.getGenerativeModel({ model: "gemini-pro"});
 
 app.use(express.urlencoded({extended : true}));
 app.use(express.json());
@@ -144,22 +142,38 @@ app.get("/home" , (req , res)=>{
     })
 }) 
 
-app.post('/getResponse', async (req, res) => {
-    const userMessage = req.body.message;
-    try {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [{ "role": "user", "content": userMessage }],
-            max_tokens: 200
-        });
-        console.log(userMessage);
-        console.log(response.choices[0].message.content);
-        res.json({ response: response.choices[0].message.content });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server' });
+// app.post('/getResponse', async (req, res) => {
+//     const userMessage = req.body.message;
+//     try {
+//         const response = await openai.chat.completions.create({
+//             model: 'gpt-3.5-turbo',
+//             messages: [{ "role": "user", "content": userMessage }],
+//             max_tokens: 200
+//         });
+//         console.log(userMessage);
+//         console.log(response.choices[0].message.content);
+//         res.json({ response: response.choices[0].message.content });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'Internal server' });
+//     }
+// });
+
+app.post('/getResponse' , async (req, res) => {
+
+    let prompt = req.body.message ;
+
+    try{
+        const result = await AImodel.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+        res.json({code : 2 , response : text })
     }
-});
+    catch(err){
+        res.json({code : 1 , response : "" , err })
+    }
+
+}) ;
 
 app.post("/signup" , async (req , res)=>{
 

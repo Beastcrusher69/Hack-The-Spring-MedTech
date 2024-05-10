@@ -17,6 +17,9 @@ function PatientDashboard() {
     let [doctors , setDoctors] = useState("") ;
     let [docName,setDocName] = useState("");
     let [docEmailId,setDocEmailId] = useState("");
+    let searchDoctorInput ;
+    let filterSpecializationSelect ;
+    let doctorProfiles ;
 
     useEffect(()=>{
         window.addEventListener('beforeunload', () => {
@@ -30,7 +33,8 @@ function PatientDashboard() {
              .then((res)=>{
                 if(res.data.code == 2 && res.data.role == "patient"){
 
-                    setDoctors(res.data.doctorData) ;
+                    console.log(res.data.doctorData) ;
+                    setDoctors(res.data.doctorData) ;   
 
                 }
 
@@ -75,54 +79,61 @@ function PatientDashboard() {
             typed.destroy(); // Destroy Typed instance to prevent memory leaks
         };
     }, []);  
-    
-    useEffect(() => {
+
+    useEffect(()=>{
+
         const handleAccordionClick = () => {
             const accordionBtns = document.querySelectorAll(".patient-homepage-accordion__title");
-
+            console.log("acc>>" , accordionBtns) ;
+    
             accordionBtns.forEach((button) => {
                 button.addEventListener("click", () => {
                     const accCollapse = button.nextElementSibling;
-
-                    if (!button.classList.contains("collapsing")) {
+                    console.log(accCollapse) ;
+    
+                    if (!accCollapse.classList.contains("collapsing")) {
                         // open accordion item
-                        if (!button.classList.contains("open")) {
+                        if (!accCollapse.classList.contains("open")) {
                             accCollapse.style.display = "block";
+                            console.log(accCollapse.clientHeight) ;
                             const accHeight = accCollapse.clientHeight;
-
-                            setTimeout(() => {
-                                accCollapse.style.height = accHeight + "px";
-                                accCollapse.style.display = "";
-                            }, 1);
-
-                            accCollapse.classList = "patient-homepage-accordion__collapse collapsing";
-
-                            setTimeout(() => {
-                                accCollapse.classList = "patient-homepage-accordion__collapse collapse open";
-                            }, 300);
+    
+                            // setTimeout(() => {
+                            //     accCollapse.style.height = accHeight + "px";
+                            //     accCollapse.style.display = "";
+                            // }, 1);
+    
+                            // accCollapse.classList = "patient-homepage-accordion__collapse collapsing";
+    
+                            // setTimeout(() => {
+                            //     accCollapse.classList = "patient-homepage-accordion__collapse collapse open";
+                            // }, 300);
                         }
                         // close accordion item
                         else {
                             accCollapse.classList = "patient-homepage-accordion__collapse collapsing";
-
+    
                             setTimeout(() => {
                                 accCollapse.style.height = "0px";
                             }, 1);
-
+    
                             setTimeout(() => {
                                 accCollapse.classList = "patient-homepage-accordion__collapse collapse";
                                 accCollapse.style.height = "";
                             }, 300);
                         }
-
+    
                         button.classList.toggle("open");
                     }
                 });
             });
         };
-
+    
         handleAccordionClick();
 
+    },[])    
+    
+    useEffect(() => {
         const menuToggle = document.querySelector('.patient-homepage-menu-toggle');
         const navList = document.querySelector('#patient-homepage-nav ul');
 
@@ -131,35 +142,57 @@ function PatientDashboard() {
             menuToggle.classList.toggle('active');
         });
 
-        const searchDoctorInput = document.getElementById('searchDoctor');
-        const filterSpecializationSelect = document.getElementById('filterSpecialization');
-        const doctorProfiles = document.querySelectorAll('.patient-homepage-doctor-profile');
+        // console.log("1>>",document.getElementById('searchDoctor')) ;
+        searchDoctorInput = document.getElementById('searchDoctor');
+        // console.log("2>>",document.getElementById('searchDoctor')) ;
+
+        filterSpecializationSelect = document.getElementById('filterSpecialization');
+        doctorProfiles = document.getElementsByClassName('patient-homepage-doctor-profile');
+        // console.log("1>>" , document.getElementsByClassName('patient-homepage-doctor-profile')) ;
+        // console.log("2>>",doctorProfiles);
 
         // Add event listeners for input fields
         searchDoctorInput.addEventListener('input', filterDoctors);
         filterSpecializationSelect.addEventListener('change', filterDoctors);
 
-        function filterDoctors() {
-            const searchValue = searchDoctorInput.value.toLowerCase();
-            const specializationValue = filterSpecializationSelect.value.toLowerCase();
         
-            // Loop through doctor profiles and apply or remove a class based on filter criteria
-            doctorProfiles.forEach(profile => {
-            const doctorName = profile.querySelector('.patient-homepage-doctor-info h2').textContent.toLowerCase();
-            const doctorSpecialization = profile.querySelector('.patient-homepage-doctor-info .dr-specialization').textContent.toLowerCase();
-        
-            const nameMatch = doctorName.includes(searchValue);
-            const specializationMatch = specializationValue === '' || doctorSpecialization.includes(specializationValue);
-        
-            if (nameMatch && specializationMatch) {
-                profile.style.display = 'block'; // Show doctor profile
-            } else {
-                profile.style.display = 'none'; // Hide doctor profile
-            }
-            });
-        }
 
-    }, []);
+        
+    }, [doctors]);
+    
+    function filterDoctors() {
+        console.log(searchDoctorInput.value.toLowerCase()) ;
+        const searchValue = searchDoctorInput.value.toLowerCase();
+
+        const specializationValue = filterSpecializationSelect.value.toLowerCase();
+        // console.log("1>>" ,specializationValue) ;
+    
+        // Loop through doctor profiles and apply or remove a class based on filter criteria
+        // console.log("hi>>" , doctorProfiles) ;
+        const profilesArray = [...doctorProfiles];
+
+        profilesArray.forEach(profile => {
+        const doctorName = profile.querySelector('.patient-homepage-doctor-info h2').textContent.toLowerCase();
+        // console.log("dn>>" ,doctorName) ;
+
+        const doctorSpecialization = profile.querySelector('.patient-homepage-doctor-info .dr-specialization').textContent.toLowerCase();
+        // console.log("ds>>" ,doctorSpecialization) ;
+    
+        const nameMatch = doctorName.includes(searchValue);
+        // console.log("namematch>>" ,nameMatch) ;
+
+        
+        const specializationMatch = specializationValue === '' || doctorSpecialization.includes(specializationValue);
+        // console.log("spmatch>>" ,specializationMatch) ;
+
+    
+        if (nameMatch && specializationMatch) {
+            profile.style.display = 'block'; // Show doctor profile
+        } else {
+            profile.style.display = 'none'; // Hide doctor profile
+        }
+        });
+    }
 
     // useEffect(()=>{
 
@@ -243,24 +276,24 @@ function PatientDashboard() {
         <section id="patient-homepage-Doctor-details">
           <h2 id="patient-homepage-h2">Meet Our Doctors</h2>
           <div id="patient-homepage-DoctorDetails">
-            {doctors ? doctors.map((obj)=>{
+            {doctors ? doctors.map((obj ,i)=>{
 
-                return(<div class="patient-homepage-doctor-profile">
-                <div class="patient-homepage-doctor-photo">
+                return(<div key = {i} className="patient-homepage-doctor-profile">
+                <div className="patient-homepage-doctor-photo">
                     <img src={obj.profilePicURL} alt="Doctor Photo"/>
                 </div>
-                <div class="patient-homepage-doctor-info">
+                <div className="patient-homepage-doctor-info">
                     <h2 id="patient-homepage-h2" >Dr. {obj.name}</h2>
-                    <p class="dr-specialization">{obj.specialization}</p>
+                    <p className="dr-specialization">{obj.specialization}</p>
                     <p>Experience: {obj.experience} years</p>
                     <p>📍 {obj.city}, {obj.state}</p>
-                    <button class="patient-homepage-btn-chat" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) ; setDisplayChatbox(!displayChatbox)}}>Chat Privately</button>
+                    <button className="patient-homepage-btn-chat" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) ; setDisplayChatbox(!displayChatbox)}}>Chat Privately</button>
 
 
-                    <button class="patient-homepage-btn-appointment" onClick={()=>{ handleBookAppointment(obj) ;}}>Book an Appointment</button>
+                    <button className="patient-homepage-btn-appointment" onClick={()=>{ handleBookAppointment(obj) ;}}>Book an Appointment</button>
 
 
-                    {/* <Link id="appointment-booking-link" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}class="patient-homepage-btn-appointment" to={{ pathname: "/appointment-booking", state: { docName , docEmailId } }}>Book an Appointment</Link> */}
+                    {/* <Link id="appointment-booking-link" onClick={()=>{setDocName(obj.name) ; setDocEmailId(obj.emailId) }}className="patient-homepage-btn-appointment" to={{ pathname: "/appointment-booking", state: { docName , docEmailId } }}>Book an Appointment</Link> */}
                 </div>
             </div>)
             }) : null}
@@ -270,66 +303,66 @@ function PatientDashboard() {
         <section id="patient-homepage-faq">
         <h2 id="patient-homepage-h2">Frequently Asked Questions</h2>
         <div className="patient-homepage-accordion">
-            <div class="patient-homepage-accordion__item">
-                <button class="patient-homepage-accordion__title">
+            <div className="patient-homepage-accordion__item">
+                <button className="patient-homepage-accordion__title">
                     Is my personal health information secure?
                 </button>
 
-                <div class="patient-homepage-accordion__collapse collapse">
-                    <div class="patient-homepage-accordion__text">
+                <div className="patient-homepage-accordion__collapse collapse">
+                    <div className="patient-homepage-accordion__text">
                         <p>Yes, we prioritize the security and confidentiality of your health information. Our system complies with industry standards and regulations to ensure your data is protected.</p>
                     </div>
                 </div>
             </div>
-            <div class="patient-homepage-accordion__item">
-                <button class="patient-homepage-accordion__title">
+            <div className="patient-homepage-accordion__item">
+                <button className="patient-homepage-accordion__title">
                     How can I update my personal information on IPDMS?
                 </button>
 
-                <div class="patient-homepage-accordion__collapse collapse">
-                    <div class="patient-homepage-accordion__text">
+                <div className="patient-homepage-accordion__collapse collapse">
+                    <div className="patient-homepage-accordion__text">
                         <p>You can update your personal information, including contact details and medical history, by accessing your profile settings. Simply log in to your account and navigate to the profile section to make the necessary changes.</p>
                     </div>
                 </div>
             </div>
-            <div class="patient-homepage-accordion__item">
-                <button class="patient-homepage-accordion__title">
+            <div className="patient-homepage-accordion__item">
+                <button className="patient-homepage-accordion__title">
                     How does IPDMS help improve patient care?
                 </button>
 
-                <div class="patient-homepage-accordion__collapse collapse">
-                    <div class="patient-homepage-accordion__text">
+                <div className="patient-homepage-accordion__collapse collapse">
+                    <div className="patient-homepage-accordion__text">
                         <p>IPDMS utilizes advanced technologies such as artificial intelligence and machine learning to analyze patient data, identify patterns, and provide valuable insights to healthcare providers. This helps in making more informed decisions, improving diagnosis accuracy, and optimizing treatment plans for better patient outcomes.</p>
                     </div>
                 </div>
             </div>
-            <div class="patient-homepage-accordion__item">
-                <button class="patient-homepage-accordion__title">
+            <div className="patient-homepage-accordion__item">
+                <button className="patient-homepage-accordion__title">
                     Is appointment scheduling convenient with IPDMS?
                 </button>
 
-                <div class="patient-homepage-accordion__collapse collapse">
-                    <div class="patient-homepage-accordion__text">
+                <div className="patient-homepage-accordion__collapse collapse">
+                    <div className="patient-homepage-accordion__text">
                         <p>Yes, IPDMS offers a user-friendly appointment scheduling system that allows patients to book appointments with healthcare providers easily. Patients also receive reminders and notifications about upcoming appointments, ensuring better adherence to scheduled visits.</p>
                     </div>
                 </div>
             </div>
-            <div class="patient-homepage-accordion__item">
-                <button class="patient-homepage-accordion__title">
+            <div className="patient-homepage-accordion__item">
+                <button className="patient-homepage-accordion__title">
                     Can I communicate securely with my healthcare provider using IPDMS?
                 </button>
-                <div class="patient-homepage-accordion__collapse collapse">
-                    <div class="patient-homepage-accordion__text">
+                <div className="patient-homepage-accordion__collapse collapse">
+                    <div className="patient-homepage-accordion__text">
                         <p>Absolutely! IPDMS provides a secure messaging feature that enables patients to communicate with their healthcare providers for consultations, follow-ups, and inquiries. The messaging platform ensures the confidentiality and privacy of patient-provider communication.</p>
                     </div>
                 </div>
             </div>
-            <div class="patient-homepage-accordion__item">
-                <button class="patient-homepage-accordion__title">
+            <div className="patient-homepage-accordion__item">
+                <button className="patient-homepage-accordion__title">
                     Do you provide additional support?
                 </button>
-                <div class="patient-homepage-accordion__collapse collapse">
-                    <div class="patient-homepage-accordion__text">
+                <div className="patient-homepage-accordion__collapse collapse">
+                    <div className="patient-homepage-accordion__text">
                         Chat and email support is available 24/7. Phone lines are open during normal working hours.
                     </div>
             </div>
