@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../CSS/GPT.css'; 
 import {IoClose} from "react-icons/io5"
+import { be_url } from '/config';
 
 
 function GPT({displayChatbox , setDisplayChatbox}) {
@@ -12,7 +13,7 @@ function GPT({displayChatbox , setDisplayChatbox}) {
     const chatBoxRef = useRef(null);
     async function sendMessageToGPT(message) {
         try {
-            const response = await fetch('http://localhost:4000/getResponse', {
+            const response = await fetch(be_url + '/getResponse', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
