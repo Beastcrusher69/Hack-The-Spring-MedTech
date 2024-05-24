@@ -9,8 +9,8 @@ const mongoUri = process.env.MONGO_URI ;
 const geminiApiKey = process.env.GEMINI_API_KEY ;
 const port = 4000 ;
 const corsOptions = {
-    origin : "http://localhost:5173",
-    // origin : "https://hack-the-spring-med-tech.vercel.app",
+    // origin : "http://localhost:5173",
+    origin : "https://hack-the-spring-med-tech.vercel.app",
     credentials : true,
     optionSuccessStatus : 200 
 }
@@ -141,23 +141,6 @@ app.get("/home" , (req , res)=>{
         "user3" : "wefw efwew" 
     })
 }) 
-
-// app.post('/getResponse', async (req, res) => {
-//     const userMessage = req.body.message;
-//     try {
-//         const response = await openai.chat.completions.create({
-//             model: 'gpt-3.5-turbo',
-//             messages: [{ "role": "user", "content": userMessage }],
-//             max_tokens: 200
-//         });
-//         console.log(userMessage);
-//         console.log(response.choices[0].message.content);
-//         res.json({ response: response.choices[0].message.content });
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ error: 'Internal server' });
-//     }
-// });
 
 app.post('/getResponse' , async (req, res) => {
 
